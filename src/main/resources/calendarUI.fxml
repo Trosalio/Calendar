@@ -13,7 +13,7 @@
 
 <BorderPane prefHeight="400.0" prefWidth="250.0" style="-fx-background-color: #ffdddd;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CalendarController">
     <fx:define>
-        <Font fx:id="verdanaFont" name="Verdana" size="15" />
+        <Font fx:id="verdanaFont" name="Verdana" size="14" />
     </fx:define>
     <top>
         <HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="250.0" style="-fx-background-color: #ff6666;" BorderPane.alignment="CENTER">
@@ -29,14 +29,14 @@
     </top>
     <center>
         <AnchorPane prefHeight="350.0" prefWidth="250.0" BorderPane.alignment="CENTER">
-            <Button fx:id="saveBtn" layoutX="150.0" layoutY="290.0" onAction="#onSave" prefHeight="35.0" prefWidth="80.0" style="-fx-background-color: #ccffff;" text="Save" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-            <Button fx:id="cancelBtn" layoutX="30.0" layoutY="290.0" onAction="#onCancel" prefHeight="35.0" prefWidth="80.0" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" />
+            <Button fx:id="saveBtn" layoutX="150.0" layoutY="290.0" onAction="#onSave" prefHeight="35.0" prefWidth="80.0" style="-fx-background-color: #ccffff;" text="Save" AnchorPane.bottomAnchor="10.0" AnchorPane.rightAnchor="10.0" font="$verdanaFont" />
+            <Button fx:id="cancelBtn" layoutX="30.0" layoutY="290.0" onAction="#onCancel" prefHeight="35.0" prefWidth="80.0" text="Cancel" AnchorPane.bottomAnchor="10.0" AnchorPane.leftAnchor="10.0" font="$verdanaFont" />
             <DatePicker layoutX="10.0" layoutY="85.0" AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-            <TextArea layoutX="10.0" layoutY="160.0" prefHeight="120.0" prefWidth="210.0" promptText="Add description..." AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-            <TextField layoutX="10.0" layoutY="30.0" promptText="Add name event.." AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" />
-            <Label layoutX="10.0" layoutY="10.0" text="Event Name" AnchorPane.leftAnchor="10.0" />
-            <Label layoutX="10.0" layoutY="65.0" text="Date" AnchorPane.leftAnchor="10.0" />
-            <Label layoutX="10.0" layoutY="140.0" text="Description" AnchorPane.leftAnchor="10.0" />
+            <TextArea layoutX="10.0" layoutY="160.0" prefHeight="120.0" prefWidth="210.0" promptText="Add description..." AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" font="$verdanaFont" />
+            <TextField layoutX="10.0" layoutY="30.0" promptText="Add name event.." AnchorPane.leftAnchor="10.0" AnchorPane.rightAnchor="10.0" font="$verdanaFont" />
+            <Label layoutX="10.0" layoutY="10.0" text="Event Name" AnchorPane.leftAnchor="10.0" font="$verdanaFont" />
+            <Label layoutX="10.0" layoutY="65.0" text="Date" AnchorPane.leftAnchor="10.0" font="$verdanaFont" />
+            <Label layoutX="10.0" layoutY="140.0" text="Description" AnchorPane.leftAnchor="10.0" font="$verdanaFont"/>
         </AnchorPane>
     </center>
     <padding>
