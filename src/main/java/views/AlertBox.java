@@ -1,5 +1,5 @@
 package views;
-import javafx.fxml.FXMLLoader;
+
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,6 +10,9 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 
+/**
+ * Thanapong Supalak 5810405029
+ */
 
 public class AlertBox {
 
@@ -26,7 +29,7 @@ public class AlertBox {
         closeButton.setOnAction(e -> window.close());
 
         VBox layout = new VBox(10);
-        layout.getChildren().addAll(label,closeButton);
+        layout.getChildren().addAll(label, closeButton);
         layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);
         window.setScene(scene);

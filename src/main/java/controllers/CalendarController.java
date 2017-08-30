@@ -10,7 +10,11 @@ import views.AlertBox;
 import java.io.IOException;
 import java.time.LocalDate;
 
-public class CalendarController{
+/**
+ * Thanapong Supalak 5810405029
+ */
+
+public class CalendarController {
 
     @FXML
     private DatePicker datePicker;
@@ -22,7 +26,7 @@ public class CalendarController{
     private DateEvent dateEvent;
 
     @FXML
-    public void initialize(){
+    public void initialize() {
 
         dateEvent = new DateEvent();
     }
@@ -34,29 +38,29 @@ public class CalendarController{
 
     @FXML
     private void onSave() throws IOException {
-        if (isValidDate(datePicker.getValue())){
-            if(!eventNameTxtF.getText().isEmpty()){
+        if (isValidDate(datePicker.getValue())) {
+            if (!eventNameTxtF.getText().isEmpty()) {
                 dateEvent.setEventName(eventNameTxtF.getText());
                 dateEvent.setEventDate(datePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
                 System.out.println("Date Event: " + dateEvent);
-                AlertBox.display("Success","Event is saved!");
+                AlertBox.display("Success", "Event is saved!");
                 closeWindow();
             } else {
-                AlertBox.display("Error","Please fill in the name of the event");
+                AlertBox.display("Error", "Please fill in the name of the event");
             }
         } else {
-            AlertBox.display("Error","Date must not be in the past nor left blanked");
+            AlertBox.display("Error", "Date must not be in the past nor left blanked");
             datePicker.setValue(LocalDate.now());
         }
 
     }
 
-    private boolean isValidDate(LocalDate pickedDate){
+    private boolean isValidDate(LocalDate pickedDate) {
         return pickedDate != null && pickedDate.compareTo(LocalDate.now()) >= 0;
     }
 
-    private void closeWindow(){
+    private void closeWindow() {
         System.exit(0);
     }
 }
