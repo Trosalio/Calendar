@@ -16,10 +16,10 @@ public class CalendarApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader calendarUILoader = new FXMLLoader(getClass().getResource("calendarUI.fxml"));
-        Scene calendarUI = new Scene(calendarUILoader.load());
-        stage.setScene(calendarUI);
-        stage.setTitle("Event Window");
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarMainUI.fxml"));
+        Scene scene = new Scene(loader.load());
+        stage.setScene(scene);
+        stage.setTitle("Calendar");
         stage.setResizable(false);
         stage.show();
     }
