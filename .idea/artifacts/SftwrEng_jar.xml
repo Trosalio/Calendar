@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="SftwrEng:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/SftwrEng_jar</output-path>
+    <root id="archive" name="SftwrEng.jar">
+      <element id="module-output" name="SftwrEng" />
+    </root>
+  </artifact>
+</component>
