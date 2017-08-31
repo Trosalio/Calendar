@@ -1,14 +1,11 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import models.DateEvent;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -24,6 +21,10 @@ public class CalendarEventController {
     private TextArea eventDescTxtA;
     @FXML
     private TextField eventNameTxtF;
+    @FXML
+    private Button cancelBtn;
+    @FXML
+    private Button saveBtn;
 
     private DateEvent dateEvent;
 
@@ -58,11 +59,12 @@ public class CalendarEventController {
 
     @FXML
     private void onCancel() {
-        closeWindow();
+        Stage stage = (Stage) cancelBtn.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
-    private void onSave() throws IOException {
+    private void onSave() {
         if (isValidDate(datePicker.getValue())) {
             if (!eventNameTxtF.getText().isEmpty()) {
                 dateEvent.setEventName(eventNameTxtF.getText());
@@ -70,7 +72,8 @@ public class CalendarEventController {
                 dateEvent.setEventDescription(eventDescTxtA.getText());
                 System.out.println("Date Event: " + dateEvent);
                 displayAlertBox(Alert.AlertType.INFORMATION, "Success", "Event is saved!");
-                closeWindow();
+                Stage stage = (Stage) saveBtn.getScene().getWindow();
+                stage.close();
             } else {
                 displayAlertBox(Alert.AlertType.ERROR, "Error", "Please fill in the name of the event");
             }
@@ -78,7 +81,6 @@ public class CalendarEventController {
             displayAlertBox(Alert.AlertType.ERROR, "Error", "Date must not be in the past");
             datePicker.setValue(LocalDate.now());
         }
-
     }
 
     private void displayAlertBox(Alert.AlertType alertType, String title, String message) {
@@ -91,9 +93,5 @@ public class CalendarEventController {
 
     private boolean isValidDate(LocalDate pickedDate) {
         return pickedDate.compareTo(LocalDate.now()) >= 0;
-    }
-
-    private void closeWindow() {
-        System.exit(0);
     }
 }

@@ -7,14 +7,24 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.effect.Blend?>
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="400.0" prefWidth="300.0" style="-fx-background-color: #ffffff;"
+<BorderPane prefHeight="400.0" prefWidth="600.0" style="-fx-background-color: #ffffff;"
             xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="controllers.CalendarMainController">
+    <fx:define>
+        <Font fx:id="verdanaFont" name="Verdana" size="13"/>
+    </fx:define>
     <top>
         <BorderPane prefHeight="60.0" prefWidth="300.0" style="-fx-background-color: #ccccff;"
                     BorderPane.alignment="CENTER">
@@ -28,36 +38,110 @@
                     </BorderPane.margin>
                 </Label>
             </left>
-            <right>
-                <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addEvent" prefHeight="50.0" prefWidth="75.0"
-                        style="-fx-background-color: #ccccff;" text="Add " textFill="WHITE"
-                        BorderPane.alignment="CENTER">
-                    <font>
-                        <Font name="Salsa-Regular" size="18.0"/>
-                    </font>
-                    <BorderPane.margin>
-                        <Insets right="5.0"/>
-                    </BorderPane.margin>
-                </Button>
-            </right>
-            <center>
-                <Line endY="45.0" startY="15.0" stroke="WHITE" BorderPane.alignment="CENTER">
-                    <BorderPane.margin>
-                        <Insets left="50.0"/>
-                    </BorderPane.margin>
-                </Line>
-            </center>
             <effect>
                 <DropShadow/>
             </effect>
+            <right>
+                <BorderPane BorderPane.alignment="CENTER">
+                    <center>
+                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addEvent" prefHeight="50.0"
+                                prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Add " textFill="WHITE"
+                                BorderPane.alignment="CENTER">
+                            <font>
+                                <Font name="Salsa-Regular" size="18.0"/>
+                            </font>
+                            <BorderPane.margin>
+                                <Insets right="5.0"/>
+                            </BorderPane.margin>
+                        </Button>
+                    </center>
+                    <left>
+                        <Line endY="45.0" startY="15.0" stroke="WHITE" BorderPane.alignment="CENTER">
+                            <BorderPane.margin>
+                                <Insets left="50.0"/>
+                            </BorderPane.margin>
+                        </Line>
+                    </left>
+                </BorderPane>
+            </right>
         </BorderPane>
     </top>
     <center>
-        <TableView prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
-            <columns>
-                <TableColumn prefWidth="75.0" text="C1"/>
-                <TableColumn prefWidth="75.0" text="C2"/>
-            </columns>
-        </TableView>
+        <GridPane BorderPane.alignment="CENTER">
+            <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="303.0" minWidth="10.0" prefWidth="218.0"/>
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="402.0" minWidth="10.0" prefWidth="382.0"/>
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+            </rowConstraints>
+            <TableView fx:id="eventTable">
+                <columns>
+                    <TableColumn editable="false" prefWidth="75.0" text="Event Date"/>
+                    <TableColumn editable="false" prefWidth="75.0" text="Event Name"/>
+                </columns>
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+                </columnResizePolicy>
+            </TableView>
+            <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                <center>
+                    <GridPane BorderPane.alignment="CENTER">
+                        <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="186.0" minWidth="10.0" prefWidth="145.0"/>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="316.0" minWidth="10.0" prefWidth="237.0"/>
+                        </columnConstraints>
+                        <rowConstraints>
+                            <RowConstraints maxHeight="142.0" minHeight="4.0" prefHeight="62.0" vgrow="SOMETIMES"/>
+                            <RowConstraints maxHeight="290.0" minHeight="10.0" prefHeight="59.0" vgrow="SOMETIMES"/>
+                            <RowConstraints maxHeight="333.0" minHeight="10.0" prefHeight="221.0" vgrow="SOMETIMES"/>
+                        </rowConstraints>
+                        <TextField fx:id="nameTxtF" GridPane.columnIndex="1" font="$verdanaFont">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </GridPane.margin>
+                        </TextField>
+                        <TextArea fx:id="descTxtA" prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1"
+                                  GridPane.rowIndex="2" font="$verdanaFont">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </GridPane.margin>
+                        </TextArea>
+                        <TextField fx:id="dateTxtF" GridPane.columnIndex="1" GridPane.rowIndex="1" font="$verdanaFont">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </GridPane.margin>
+                        </TextField>
+                        <Label alignment="CENTER" text="Event Description:" GridPane.rowIndex="2" font="$verdanaFont">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <Label text="Event Date:" GridPane.rowIndex="1" font="$verdanaFont">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                        <Label text="Event Name: " font="$verdanaFont">
+                            <GridPane.margin>
+                                <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
+                            </GridPane.margin>
+                        </Label>
+                    </GridPane>
+                </center>
+                <top>
+                    <VBox alignment="CENTER_LEFT" BorderPane.alignment="CENTER">
+                        <Label text="Event Info" font="$verdanaFont">
+                            <VBox.margin>
+                                <Insets bottom="5.0" left="10.0" right="5.0" top="5.0"/>
+                            </VBox.margin>
+                            <effect>
+                                <Blend/>
+                            </effect>
+                        </Label>
+                    </VBox>
+                </top>
+            </BorderPane>
+        </GridPane>
     </center>
 </BorderPane>
