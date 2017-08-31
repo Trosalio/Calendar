@@ -5,6 +5,7 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import models.DateEvent;
+import models.EventListSingleton;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -70,7 +71,8 @@ public class CalendarEventController {
                 dateEvent.setEventName(eventNameTxtF.getText());
                 dateEvent.setEventDate(datePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
-                System.out.println("Date Event: " + dateEvent);
+                System.out.println(dateEvent);
+                EventListSingleton.getInstance().addEventList(dateEvent);
                 displayAlertBox(Alert.AlertType.INFORMATION, "Success", "Event is saved!");
                 Stage stage = (Stage) saveBtn.getScene().getWindow();
                 stage.close();
