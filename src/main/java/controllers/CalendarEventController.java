@@ -71,7 +71,6 @@ public class CalendarEventController {
                 dateEvent.setEventName(eventNameTxtF.getText());
                 dateEvent.setEventDate(datePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
-                System.out.println(dateEvent);
                 EventListSingleton.getInstance().addEventList(dateEvent);
                 displayAlertBox(Alert.AlertType.INFORMATION, "Success", "Event is saved!");
                 Stage stage = (Stage) saveBtn.getScene().getWindow();
