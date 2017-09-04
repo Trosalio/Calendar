@@ -1,22 +1,16 @@
 package controllers;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import models.DateEvent;
-import models.EventListSingleton;
 
-import javax.swing.text.DateFormatter;
+import models.DateEvent;
+import models.EventList;
+
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -31,6 +25,10 @@ public class CalendarMainController {
     @FXML
     private Button addBtn;
     @FXML
+    private Button deleteBtn;
+    @FXML
+    private Button editBtn;
+    @FXML
     private TextField nameTxtF;
     @FXML
     private TextArea descTxtA;
@@ -43,43 +41,123 @@ public class CalendarMainController {
     @FXML
     private TableColumn<DateEvent, String> nameColumn;
 
-    @FXML
-    public void initialize() {
-        String pattern = "dd MMMM YYYY";
-        DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
+    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM YYYY");
+    private EventList eventList;
 
-        dateColumn.setCellValueFactory(new PropertyValueFactory<>("eventDate"));
-        dateColumn.setCellFactory(c -> new TableCell<DateEvent, LocalDate>(){
+    @FXML
+    private void onAdd() {
+        DateEvent event = new DateEvent();
+        if (popEventWindow(event)) {
+            eventList.addEventList(event);
+            if (eventList.getEventList().size() > 0) {
+                deleteBtn.setDisable(false);
+                editBtn.setDisable(false);
+                editBtn.setVisible(true);
+            }
+        }
+    }
+
+    @FXML
+    private void onDelete(){
+        int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
+        eventList.removeEvent(removeIndex);
+
+        if (eventList.getEventList().size() <= 0) {
+            deleteBtn.setDisable(true);
+            editBtn.setDisable(true);
+            editBtn.setVisible(false);
+        }
+    }
+
+    @FXML
+    private void onEdit(){
+        DateEvent event = eventList.getCurrentEvent();
+        if (event != null) {
+            if (popEventWindow(event)) {
+                modifyEventInfo(event);
+            }
+        }
+    }
+
+    private boolean popEventWindow(DateEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/CalendarEventUI.fxml"));
+            Parent root = loader.load();
+            Stage stage = new Stage();
+            Scene scene = new Scene(root);
+            stage.setScene(scene);
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.setTitle("Event");
+            stage.setResizable(false);
+
+            CalendarEventController eventController = loader.getController();
+            eventController.setDateTimeFormatter(dtf);
+            eventController.setCurrentEvent(event);
+            eventController.setStage(stage);
+
+            stage.showAndWait();
+            return eventController.isSaved();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    private void setupTableView() {
+        eventTable.setItems(eventList.getEventList());
+        nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
+        dateColumn.setCellValueFactory(cell -> cell.getValue().eventDateProperty());
+        setDateColumnFormat();
+        setupItemListener();
+    }
+
+    private void setDateColumnFormat() {
+        dateColumn.setCellFactory(cell -> new TableCell<DateEvent, LocalDate>() {
             @Override
             protected void updateItem(LocalDate item, boolean empty) {
                 super.updateItem(item, empty);
                 if (empty)
                     setText(null);
                 else
-                    setText(dateFormatter.format(item));
+                    setText(dtf.format(item));
             }
         });
-        nameColumn.setCellValueFactory((new PropertyValueFactory<>("eventName")));
-        eventTable.setItems(EventListSingleton.getInstance().getEventList());
+    }
+
+    private void setupItemListener() {
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
+            eventList.setCurrentEvent(newSelection);
+            modifyEventInfo(newSelection);
+        });
+
+        eventList.currentEventProperty().addListener((obs, oldSelection, newSelection) -> {
+            if (newSelection == null) {
+                eventTable.getSelectionModel().clearSelection();
+            } else {
+                eventTable.getSelectionModel().select(newSelection);
+            }
+        });
+    }
+
+    private void modifyEventInfo(DateEvent event){
+        if(event != null){
             String name = eventTable.getSelectionModel().getSelectedItem().getEventName();
             LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventDate();
             String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
             nameTxtF.setText(name);
-            dateTxtF.setText(dateFormatter.format(date));
+            dateTxtF.setText(dtf.format(date));
             descTxtA.setText(description);
-        });
+        }
     }
 
-    @FXML
-    private void addEvent(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(getClass().getClassLoader().getResource("CalendarEventUI.fxml"));
-        Stage stage = new Stage();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Event");
-        stage.setResizable(false);
-        stage.show();
+    public EventList getEventList() {
+        return eventList;
+    }
+
+    public void setEventList(EventList eventList) {
+        this.eventList = eventList;
+        setupTableView();
     }
 }

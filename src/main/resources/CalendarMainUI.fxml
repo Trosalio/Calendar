@@ -28,7 +28,7 @@
                         <Font name="Salsa-Regular" size="36.0" />
                     </font>
                     <BorderPane.margin>
-                        <Insets left="5.0" />
+                        <Insets left="10.0" />
                     </BorderPane.margin>
                 </Label>
             </left>
@@ -37,8 +37,8 @@
             </effect>
             <right>
                 <BorderPane BorderPane.alignment="CENTER">
-                    <center>
-                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#addEvent" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Add " textFill="WHITE" BorderPane.alignment="CENTER">
+               <right>
+                        <Button fx:id="addBtn" mnemonicParsing="false" onAction="#onAdd" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Add " textFill="WHITE" BorderPane.alignment="CENTER">
                             <font>
                                 <Font name="Salsa-Regular" size="18.0" />
                             </font>
@@ -46,14 +46,24 @@
                                 <Insets right="5.0" />
                             </BorderPane.margin>
                         </Button>
-                    </center>
-                    <left>
+               </right>
+               <center>
                         <Line endY="45.0" startY="15.0" stroke="WHITE" BorderPane.alignment="CENTER">
                             <BorderPane.margin>
-                                <Insets left="50.0" />
+                                <Insets />
                             </BorderPane.margin>
                         </Line>
-                    </left>
+               </center>
+               <left>
+                  <Button fx:id="editBtn" disable="true" mnemonicParsing="false" onAction="#onEdit" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Edit" textFill="WHITE" visible="false" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                  </Button>
+               </left>
                 </BorderPane>
             </right>
         </BorderPane>
@@ -67,15 +77,22 @@
             <rowConstraints>
                 <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
             </rowConstraints>
-            <TableView fx:id="eventTable">
-                <columns>
-                    <TableColumn fx:id="dateColumn" editable="false" prefWidth="75.0" text="Event Date" />
-                    <TableColumn fx:id="nameColumn" editable="false" prefWidth="75.0" text="Event Name" />
-                </columns>
-                <columnResizePolicy>
-                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                </columnResizePolicy>
-            </TableView>
+         <BorderPane prefHeight="200.0" prefWidth="200.0">
+            <center>
+                  <TableView fx:id="eventTable" BorderPane.alignment="CENTER">
+                      <columns>
+                          <TableColumn fx:id="dateColumn" editable="false" prefWidth="75.0" text="Event Date" />
+                          <TableColumn fx:id="nameColumn" editable="false" prefWidth="75.0" text="Event Name" />
+                      </columns>
+                      <columnResizePolicy>
+                          <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                      </columnResizePolicy>
+                  </TableView>
+            </center>
+            <bottom>
+               <Button fx:id="deleteBtn" disable="true" mnemonicParsing="false" onAction="#onDelete" prefHeight="35.0" prefWidth="218.0" text="Delete" BorderPane.alignment="CENTER" />
+            </bottom>
+         </BorderPane>
             <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
                 <center>
                     <GridPane BorderPane.alignment="CENTER">

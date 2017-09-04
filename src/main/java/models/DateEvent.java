@@ -32,38 +32,37 @@ public class DateEvent{
         return eventName.get();
     }
 
-    public SimpleStringProperty eventNameProperty() {
-        return eventName;
-    }
-
     public void setEventName(String eventName) {
         this.eventName.set(eventName);
+    }
+
+    public SimpleStringProperty eventNameProperty() {
+        return eventName;
     }
 
     public LocalDate getEventDate() {
         return eventDate.get();
     }
 
-    public ObjectProperty<LocalDate> eventDateProperty() {
-        return eventDate;
-    }
-
     public void setEventDate(LocalDate eventDate) {
         this.eventDate.set(eventDate);
+    }
+
+    public ObjectProperty<LocalDate> eventDateProperty() {
+        return eventDate;
     }
 
     public String getEventDescription() {
         return eventDescription.get();
     }
 
-    public SimpleStringProperty eventDescriptionProperty() {
-        return eventDescription;
-    }
-
     public void setEventDescription(String eventDescription) {
         this.eventDescription.set(eventDescription);
     }
 
+//    public SimpleStringProperty eventDescriptionProperty() {
+//        return eventDescription;
+//    }
 
     @Override
     public String toString() {

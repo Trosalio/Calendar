@@ -5,10 +5,11 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import javafx.util.StringConverter;
 import models.DateEvent;
-import models.EventListSingleton;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import static javafx.scene.control.Alert.*;
 
 /**
  * Thanapong Supalak 5810405029
@@ -27,20 +28,60 @@ public class CalendarEventController {
     @FXML
     private Button saveBtn;
 
+    private Boolean saveBool = false;
+    private Stage stage;
     private DateEvent dateEvent;
+    private DateTimeFormatter dateTimeFormatter;
 
     @FXML
     public void initialize() {
-        dateEvent = new DateEvent();
+        setDatePickerFormat();
+    }
 
+    @FXML
+    private void onCancel() {
+        closeWindow();
+    }
+
+    @FXML
+    private void onSave() {
+        if (isValidDate()) {
+            if (!eventNameTxtF.getText().isEmpty()) {
+                dateEvent.setEventName(eventNameTxtF.getText());
+                dateEvent.setEventDate(datePicker.getValue());
+                dateEvent.setEventDescription(eventDescTxtA.getText());
+                displayAlertBox(AlertType.INFORMATION, "Success", "Event is saved!");
+
+                saveBool = true;
+                closeWindow();
+            } else {
+                displayAlertBox(AlertType.ERROR, "Error", "Please fill in the name of the event");
+            }
+        } else {
+            displayAlertBox(AlertType.ERROR, "Error", "Date must not be in the past");
+            datePicker.setValue(LocalDate.now());
+        }
+    }
+
+    private void displayAlertBox(AlertType alertType, String title, String message) {
+        Alert alertBox = new Alert(alertType);
+        alertBox.setHeaderText(null);
+        alertBox.setTitle(title);
+        alertBox.setContentText(message);
+        alertBox.showAndWait();
+    }
+
+    private boolean isValidDate() {
+        return !datePicker.getValue().isBefore(LocalDate.now());
+    }
+
+    private void setDatePickerFormat(){
         datePicker.setConverter(new StringConverter<LocalDate>() {
-            String pattern = "dd MMMM YYYY";
-            DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern(pattern);
 
             @Override
             public String toString(LocalDate date) {
                 if (date != null) {
-                    return dateFormatter.format(date);
+                    return dateTimeFormatter.format(date);
                 } else {
                     return "";
                 }
@@ -49,7 +90,7 @@ public class CalendarEventController {
             @Override
             public LocalDate fromString(String string) {
                 if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateFormatter);
+                    return LocalDate.parse(string, dateTimeFormatter);
                 } else {
                     return null;
                 }
@@ -57,42 +98,23 @@ public class CalendarEventController {
         });
         datePicker.setValue(LocalDate.now());
     }
+    public void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
+    }
 
-    @FXML
-    private void onCancel() {
-        Stage stage = (Stage) cancelBtn.getScene().getWindow();
+    private void closeWindow(){
         stage.close();
     }
 
-    @FXML
-    private void onSave() {
-        if (isValidDate(datePicker.getValue())) {
-            if (!eventNameTxtF.getText().isEmpty()) {
-                dateEvent.setEventName(eventNameTxtF.getText());
-                dateEvent.setEventDate(datePicker.getValue());
-                dateEvent.setEventDescription(eventDescTxtA.getText());
-                EventListSingleton.getInstance().addEventList(dateEvent);
-                displayAlertBox(Alert.AlertType.INFORMATION, "Success", "Event is saved!");
-                Stage stage = (Stage) saveBtn.getScene().getWindow();
-                stage.close();
-            } else {
-                displayAlertBox(Alert.AlertType.ERROR, "Error", "Please fill in the name of the event");
-            }
-        } else {
-            displayAlertBox(Alert.AlertType.ERROR, "Error", "Date must not be in the past");
-            datePicker.setValue(LocalDate.now());
-        }
+    public void setStage(Stage stage){
+        this.stage = stage;
     }
 
-    private void displayAlertBox(Alert.AlertType alertType, String title, String message) {
-        Alert alertBox = new Alert(alertType);
-        alertBox.setHeaderText(null);
-        alertBox.setTitle(title);
-        alertBox.setContentText(message);
-        alertBox.showAndWait();
+    public boolean isSaved(){
+        return saveBool;
     }
 
-    private boolean isValidDate(LocalDate pickedDate) {
-        return pickedDate.compareTo(LocalDate.now()) >= 0;
+    public void setCurrentEvent(DateEvent currentEvent) {
+        dateEvent = currentEvent;
     }
 }
