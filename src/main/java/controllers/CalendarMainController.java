@@ -58,7 +58,7 @@ public class CalendarMainController {
     }
 
     @FXML
-    private void onDelete(){
+    private void onDelete() {
         int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
         eventList.removeEvent(removeIndex);
 
@@ -70,7 +70,7 @@ public class CalendarMainController {
     }
 
     @FXML
-    private void onEdit(){
+    private void onEdit() {
         DateEvent event = eventList.getCurrentEvent();
         if (event != null) {
             if (popEventWindow(event)) {
@@ -102,6 +102,17 @@ public class CalendarMainController {
         } catch (IOException e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    private void modifyEventInfo(DateEvent event) {
+        if (event != null) {
+            String name = eventTable.getSelectionModel().getSelectedItem().getEventName();
+            LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventDate();
+            String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
+            nameTxtF.setText(name);
+            dateTxtF.setText(dtf.format(date));
+            descTxtA.setText(description);
         }
     }
 
@@ -139,17 +150,6 @@ public class CalendarMainController {
                 eventTable.getSelectionModel().select(newSelection);
             }
         });
-    }
-
-    private void modifyEventInfo(DateEvent event){
-        if(event != null){
-            String name = eventTable.getSelectionModel().getSelectedItem().getEventName();
-            LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventDate();
-            String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
-            nameTxtF.setText(name);
-            dateTxtF.setText(dtf.format(date));
-            descTxtA.setText(description);
-        }
     }
 
     public EventList getEventList() {

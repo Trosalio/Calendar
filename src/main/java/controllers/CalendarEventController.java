@@ -51,11 +51,11 @@ public class CalendarEventController {
                 dateEvent.setEventDate(datePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
                 popDialog(AlertType.INFORMATION, "Success", "Event is saved!");
-
                 saveBool = true;
                 closeWindow();
             } else {
                 popDialog(AlertType.ERROR, "Error", "Please fill in the name of the event");
+                eventNameTxtF.requestFocus();
             }
         } else {
             popDialog(AlertType.ERROR, "Error", "Date must not be in the past");
