@@ -50,20 +50,20 @@ public class CalendarEventController {
                 dateEvent.setEventName(eventNameTxtF.getText());
                 dateEvent.setEventDate(datePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
-                displayAlertBox(AlertType.INFORMATION, "Success", "Event is saved!");
+                popDialog(AlertType.INFORMATION, "Success", "Event is saved!");
 
                 saveBool = true;
                 closeWindow();
             } else {
-                displayAlertBox(AlertType.ERROR, "Error", "Please fill in the name of the event");
+                popDialog(AlertType.ERROR, "Error", "Please fill in the name of the event");
             }
         } else {
-            displayAlertBox(AlertType.ERROR, "Error", "Date must not be in the past");
+            popDialog(AlertType.ERROR, "Error", "Date must not be in the past");
             datePicker.setValue(LocalDate.now());
         }
     }
 
-    private void displayAlertBox(AlertType alertType, String title, String message) {
+    private void popDialog(AlertType alertType, String title, String message) {
         Alert alertBox = new Alert(alertType);
         alertBox.setHeaderText(null);
         alertBox.setTitle(title);
