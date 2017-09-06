@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.DBManager;
 import models.EventList;
 
 import java.io.IOException;
@@ -23,8 +24,12 @@ public class CalendarApp extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarMainUI.fxml"));
         Parent root = loader.load();
 
-        CalendarMainController calendarMainController = loader.getController();
         EventList eventList = new EventList();
+        DBManager dbManager = new DBManager(eventList);
+        eventList.setDbManager(dbManager);
+        dbManager.loadDatabase();
+        CalendarMainController calendarMainController = loader.getController();
+
         calendarMainController.setEventList(eventList);
 
         Scene scene = new Scene(root);

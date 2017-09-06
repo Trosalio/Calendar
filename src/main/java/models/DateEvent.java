@@ -10,22 +10,21 @@ import java.time.LocalDate;
  * Thanapong Supalak 5810405029
  */
 
-public class DateEvent{
+public class DateEvent {
 
-    private SimpleStringProperty eventName;
-    private ObjectProperty<LocalDate> eventDate;
-    private SimpleStringProperty eventDescription;
+    private static int primaryKeyDateID;
 
-    public DateEvent() {
-        this.eventName = new SimpleStringProperty();
-        this.eventDate = new SimpleObjectProperty<>();
-        this.eventDescription = new SimpleStringProperty();
+    private int DateID;
+    private SimpleStringProperty eventName = new SimpleStringProperty(this, "eventName");
+    private ObjectProperty<LocalDate> eventDate = new SimpleObjectProperty<>(this, "eventDate");
+    private SimpleStringProperty eventDescription = new SimpleStringProperty(this, "eventDescription");
+
+    public static int getPrimaryKeyDateID() {
+        return primaryKeyDateID;
     }
 
-    public DateEvent(String eventName, LocalDate eventDate, String eventDescription) {
-        this.eventName = new SimpleStringProperty(eventName);
-        this.eventDate = new SimpleObjectProperty<>(eventDate);
-        this.eventDescription = new SimpleStringProperty(eventDescription);
+    public static void setPrimaryKeyDateID(int primaryKeyDateID) {
+        DateEvent.primaryKeyDateID = primaryKeyDateID;
     }
 
     public String getEventName() {
@@ -60,9 +59,17 @@ public class DateEvent{
         this.eventDescription.set(eventDescription);
     }
 
-//    public SimpleStringProperty eventDescriptionProperty() {
-//        return eventDescription;
-//    }
+    public int getDateID() {
+        return DateID;
+    }
+
+    public void setDateID(int dateID) {
+        DateID = dateID;
+    }
+
+    public SimpleStringProperty eventDescriptionProperty() {
+        return eventDescription;
+    }
 
     @Override
     public String toString() {

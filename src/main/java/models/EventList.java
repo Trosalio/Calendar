@@ -14,16 +14,27 @@ public class EventList {
     private final ObservableList<DateEvent> eventList = FXCollections.observableArrayList();
     private final ObjectProperty<DateEvent> currentEvent = new SimpleObjectProperty<>(null);
 
+    private DBManager dbManager;
+
     public ObservableList<DateEvent> getEventList() {
         return eventList;
     }
 
-    public void addEventList(DateEvent event) {
+    public void addEvent(DateEvent event) {
+        DateEvent.setPrimaryKeyDateID(DateEvent.getPrimaryKeyDateID() + 1);
+        event.setDateID(DateEvent.getPrimaryKeyDateID());
         eventList.add(event);
+        if(dbManager != null) dbManager.insertEventRecord(event);
     }
 
-    public void removeEvent(int removeIndex) {
+    public void deleteEvent(int removeIndex) {
+        int removedDateIDKey = eventList.get(removeIndex).getDateID();
         eventList.remove(removeIndex);
+        if(dbManager != null) dbManager.deleteEventRecord(removedDateIDKey);
+    }
+    
+    public void editEvent(DateEvent event) {
+        if(dbManager != null) dbManager.modifyEventRecord(event);
     }
 
     public DateEvent getCurrentEvent() {
@@ -36,5 +47,9 @@ public class EventList {
 
     public ObjectProperty<DateEvent> currentEventProperty() {
         return currentEvent;
+    }
+
+    public void setDbManager(DBManager dbManager) {
+        this.dbManager = dbManager;
     }
 }

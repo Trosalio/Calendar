@@ -40,33 +40,23 @@ public class CalendarMainController {
     private TableColumn<DateEvent, LocalDate> dateColumn;
     @FXML
     private TableColumn<DateEvent, String> nameColumn;
-
-    private DateTimeFormatter dtf = DateTimeFormatter.ofPattern("dd MMMM YYYY");
+    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
     private EventList eventList;
 
     @FXML
     private void onAdd() {
         DateEvent event = new DateEvent();
         if (popEventWindow(event)) {
-            eventList.addEventList(event);
-            if (eventList.getEventList().size() > 0) {
-                deleteBtn.setDisable(false);
-                editBtn.setDisable(false);
-                editBtn.setVisible(true);
-            }
+            eventList.addEvent(event);
+            changeButtonsState();
         }
     }
 
     @FXML
     private void onDelete() {
         int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
-        eventList.removeEvent(removeIndex);
-
-        if (eventList.getEventList().size() <= 0) {
-            deleteBtn.setDisable(true);
-            editBtn.setDisable(true);
-            editBtn.setVisible(false);
-        }
+        eventList.deleteEvent(removeIndex);
+        changeButtonsState();
     }
 
     @FXML
@@ -74,6 +64,7 @@ public class CalendarMainController {
         DateEvent event = eventList.getCurrentEvent();
         if (event != null) {
             if (popEventWindow(event)) {
+                eventList.editEvent(event);
                 modifyEventInfo(event);
             }
         }
@@ -92,8 +83,8 @@ public class CalendarMainController {
             stage.setResizable(false);
 
             CalendarEventController eventController = loader.getController();
-            eventController.setDateTimeFormatter(dtf);
             eventController.setCurrentEvent(event);
+            eventController.setDateTimeFormatter(dateTimeFormatter);
             eventController.setStage(stage);
 
             stage.showAndWait();
@@ -111,7 +102,7 @@ public class CalendarMainController {
             LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventDate();
             String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
             nameTxtF.setText(name);
-            dateTxtF.setText(dtf.format(date));
+            dateTxtF.setText(dateTimeFormatter.format(date));
             descTxtA.setText(description);
         }
     }
@@ -122,6 +113,7 @@ public class CalendarMainController {
         dateColumn.setCellValueFactory(cell -> cell.getValue().eventDateProperty());
         setDateColumnFormat();
         setupItemListener();
+        changeButtonsState();
     }
 
     private void setDateColumnFormat() {
@@ -132,7 +124,7 @@ public class CalendarMainController {
                 if (empty)
                     setText(null);
                 else
-                    setText(dtf.format(item));
+                    setText(dateTimeFormatter.format(item));
             }
         });
     }
@@ -152,12 +144,24 @@ public class CalendarMainController {
         });
     }
 
-    public EventList getEventList() {
-        return eventList;
-    }
-
     public void setEventList(EventList eventList) {
         this.eventList = eventList;
+        System.out.println(eventList.getEventList().size());
         setupTableView();
+    }
+
+    private void changeButtonsState() {
+        if (eventList.getEventList().isEmpty()) {
+            deleteBtn.setDisable(true);
+            editBtn.setDisable(true);
+            editBtn.setVisible(false);
+            nameTxtF.clear();
+            dateTxtF.clear();
+            descTxtA.clear();
+        } else {
+            deleteBtn.setDisable(false);
+            editBtn.setDisable(false);
+            editBtn.setVisible(true);
+        }
     }
 }
