@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!--Thanapong Supalak 5810405029 -->
+<!--
+    Name:   Thanapong Supalak
+    ID:     5810405029
+    Project Name: Calendar
+-->
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
