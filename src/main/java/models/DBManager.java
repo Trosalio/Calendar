@@ -5,10 +5,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 /**
- * Created By:
- * -Name:   Thanapong Supalak
- * -ID:     5810405029
- * Project Name: Calendar
+ * @author
+ * Name:   Thanapong Supalak
+ * ID:     5810405029
+ * @Project Project Name: Calendar
  */
 
 public class DBManager {
@@ -37,7 +37,8 @@ public class DBManager {
 
             selectQuery = "SELECT seq FROM sqlite_sequence";
             resultSet = conn.prepareStatement(selectQuery).executeQuery();
-            DateEvent.setPrimaryKeyDateID(resultSet.getInt(1));
+            int pkID = resultSet.next() ? resultSet.getInt(1) : 1;
+            DateEvent.setPrimaryKeyDateID(pkID);
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
