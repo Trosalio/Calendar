@@ -149,7 +149,6 @@ public class CalendarMainController {
 
     public void setEventList(EventList eventList) {
         this.eventList = eventList;
-        System.out.println(eventList.getEventList().size());
         setupTableView();
     }
 
