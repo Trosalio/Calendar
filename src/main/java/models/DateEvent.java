@@ -7,7 +7,10 @@ import javafx.beans.property.SimpleStringProperty;
 import java.time.LocalDate;
 
 /**
- * Thanapong Supalak 5810405029
+ * Created By:
+ * -Name:   Thanapong Supalak
+ * -ID:     5810405029
+ * Project Name: Calendar
  */
 
 public class DateEvent {
@@ -69,15 +72,6 @@ public class DateEvent {
 
     public SimpleStringProperty eventDescriptionProperty() {
         return eventDescription;
-    }
-
-    @Override
-    public String toString() {
-        return "DateEvent{" +
-                "eventName=" + eventName +
-                ", eventDate=" + eventDate +
-                ", eventDescription=" + eventDescription +
-                '}';
     }
 }
 

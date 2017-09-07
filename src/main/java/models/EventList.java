@@ -6,7 +6,10 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 /**
- * Thanapong Supalak 5810405029
+ * Created By:
+ * -Name:   Thanapong Supalak
+ * -ID:     5810405029
+ * Project Name: Calendar
  */
 
 public class EventList {
@@ -16,25 +19,21 @@ public class EventList {
 
     private DBManager dbManager;
 
-    public ObservableList<DateEvent> getEventList() {
-        return eventList;
-    }
-
     public void addEvent(DateEvent event) {
         DateEvent.setPrimaryKeyDateID(DateEvent.getPrimaryKeyDateID() + 1);
         event.setDateID(DateEvent.getPrimaryKeyDateID());
         eventList.add(event);
-        if(dbManager != null) dbManager.insertEventRecord(event);
+        if (dbManager != null) dbManager.insertEventRecord(event);
     }
 
     public void deleteEvent(int removeIndex) {
         int removedDateIDKey = eventList.get(removeIndex).getDateID();
         eventList.remove(removeIndex);
-        if(dbManager != null) dbManager.deleteEventRecord(removedDateIDKey);
+        if (dbManager != null) dbManager.deleteEventRecord(removedDateIDKey);
     }
-    
+
     public void editEvent(DateEvent event) {
-        if(dbManager != null) dbManager.modifyEventRecord(event);
+        if (dbManager != null) dbManager.modifyEventRecord(event);
     }
 
     public DateEvent getCurrentEvent() {
@@ -51,5 +50,9 @@ public class EventList {
 
     public void setDbManager(DBManager dbManager) {
         this.dbManager = dbManager;
+    }
+
+    public ObservableList<DateEvent> getEventList() {
+        return eventList;
     }
 }

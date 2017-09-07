@@ -12,7 +12,10 @@ import java.time.format.DateTimeFormatter;
 import static javafx.scene.control.Alert.*;
 
 /**
- * Thanapong Supalak 5810405029
+ * Created By:
+ * -Name:   Thanapong Supalak
+ * -ID:     5810405029
+ * Project Name: Calendar
  */
 
 public class CalendarEventController {
@@ -45,7 +48,7 @@ public class CalendarEventController {
 
     @FXML
     private void onSave() {
-        if (isValidDate()) {
+        if (isValidDate(datePicker.getValue())) {
             if (!eventNameTxtF.getText().isEmpty()) {
                 dateEvent.setEventName(eventNameTxtF.getText());
                 dateEvent.setEventDate(datePicker.getValue());
@@ -71,8 +74,8 @@ public class CalendarEventController {
         alertBox.showAndWait();
     }
 
-    private boolean isValidDate() {
-        return !datePicker.getValue().isBefore(LocalDate.now());
+    private boolean isValidDate(LocalDate currentDate) {
+        return !currentDate.isBefore(LocalDate.now());
     }
 
     private void setDatePickerFormat(){
