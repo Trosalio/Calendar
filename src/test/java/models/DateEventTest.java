@@ -9,9 +9,9 @@ import java.time.LocalDate;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Created By:
- * -Name:   Thanapong Supalak
- * -ID:     5810405029
+ * ~Created by~
+ * Name:   Thanapong Supalak (Trosalio)
+ * ID:     5810405029
  * Project Name: Calendar
  */
 
