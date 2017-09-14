@@ -31,13 +31,14 @@ public class DBManager {
     public void insertEventRecord(DateEvent event) {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String insertSQL = "INSERT INTO DateEvent (EventName, EventDate, EventDescription) VALUES(?,?,?)";
+        String insertSQL = "INSERT INTO DateEvent (eventName, eventPriority, eventDate, eventDescription) VALUES(?,?,?,?)";
         try {
             conn = connectDB();
             pStmt = conn.prepareStatement(insertSQL);
             pStmt.setString(1, event.getEventName());
-            pStmt.setString(2, dateTimeFormatter.format(event.getEventDate()));
-            pStmt.setString(3, event.getEventDescription());
+            pStmt.setInt(2, event.getEventPriority());
+            pStmt.setString(3, dateTimeFormatter.format(event.getEventStartDate()));
+            pStmt.setString(4, event.getEventDescription());
             pStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -55,22 +56,25 @@ public class DBManager {
         }
     }
 
-    public void deleteEventRecord(int dateID) {
-        String deleteSQL = String.format("DELETE FROM DateEvent WHERE DateID = %d", dateID);
+    public void deleteEventRecord(int ID) {
+        String deleteSQL = String.format("DELETE FROM DateEvent WHERE ID = %d", ID);
+        updateDatabase(deleteSQL);
+        deleteSQL = String.format("DELETE FROM DateEventMeta WHERE eventID = %d", ID);
         updateDatabase(deleteSQL);
     }
 
     public void modifyEventRecord(DateEvent event) {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String updateSQL = "UPDATE DateEvent SET EventName = ?, EventDate = ?, EventDescription = ? WHERE DateID = ?";
+        String updateSQL = "UPDATE DateEvent SET eventName = ?, eventPriority = ?, eventDate = ?, eventDescription = ? WHERE ID = ?";
         try {
             conn = connectDB();
             pStmt = conn.prepareStatement(updateSQL);
             pStmt.setString(1, event.getEventName());
-            pStmt.setString(2, dateTimeFormatter.format(event.getEventDate()));
-            pStmt.setString(3, event.getEventDescription());
-            pStmt.setInt(4, event.getDateID());
+            pStmt.setInt(2, event.getEventPriority());
+            pStmt.setString(3, dateTimeFormatter.format(event.getEventStartDate()));
+            pStmt.setString(4, event.getEventDescription());
+            pStmt.setInt(5, event.getID());
             pStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -115,10 +119,10 @@ public class DBManager {
             pullDataToEventList(resultSet);
             resultSet.close();
 
-            selectSQL = "SELECT seq FROM sqlite_sequence";
+            selectSQL = "SELECT seq FROM sqlite_sequence WHERE name = 'DateEvent'";
             resultSet = conn.prepareStatement(selectSQL).executeQuery();
             int pkID = resultSet.next() ? resultSet.getInt(1) : 1;
-            DateEvent.setPrimaryKeyDateID(pkID);
+            DateEvent.setPrimaryKeyID(pkID);
             resultSet.close();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -161,25 +165,36 @@ public class DBManager {
 
     private void createTableIfNotExist() {
         String createTableSQL = "CREATE TABLE IF NOT EXISTS DateEvent" +
-                "(DateID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                "EventName TEXT NOT NULL," +
-                "EventDate TEXT NOT NULL," +
-                "EventDescription TEXT)";
+                "(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "eventName TEXT NOT NULL," +
+                "eventPriority INTEGER NOT NULL," +
+                "eventDate TEXT NOT NULL," +
+                "eventDescription TEXT)";
+        updateDatabase(createTableSQL);
+        createTableSQL = "CREATE TABLE IF NOT EXISTS DateEventMeta" +
+                "(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
+                "eventID INTEGER NOT NULL," +
+                "repeatInterval INTEGER," + "repeatMonth INTEGER," + "repeatWeek INTEGER," +
+                "repeatDay INTEGER," +
+                "repeatWeekday INTEGER," +
+                "FOREIGN KEY(eventID) REFERENCES DateEvent(ID))";
         updateDatabase(createTableSQL);
     }
 
     private void pullDataToEventList(ResultSet rs) throws SQLException {
         while (rs.next()) {
             DateEvent event = new DateEvent();
-            int DateID = rs.getInt("DateID");
-            String name = rs.getString("EventName");
-            String date = rs.getString("EventDate");
-            String desc = rs.getString("EventDescription");
-            event.setDateID(DateID);
+            int ID = rs.getInt("ID");
+            String name = rs.getString("eventName");
+            int priority = rs.getInt("eventPriority");
+            String date = rs.getString("eventDate");
+            String desc = rs.getString("eventDescription");
+            event.setID(ID);
             event.setEventName(name);
-            event.setEventDate(LocalDate.parse(date, dateTimeFormatter));
+            event.setEventPriority(priority);
+            event.setEventStartDate(LocalDate.parse(date, dateTimeFormatter));
             event.setEventDescription(desc);
-            DateEvent.setPrimaryKeyDateID(rs.getInt("DateID"));
+            DateEvent.setPrimaryKeyID(rs.getInt("ID"));
             eventList.getEventList().add(event);
         }
     }

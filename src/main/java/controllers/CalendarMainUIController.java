@@ -23,26 +23,23 @@ import java.time.format.DateTimeFormatter;
  */
 
 
-public class CalendarMainController {
+public class CalendarMainUIController {
 
     @FXML
-    private Button addBtn;
+    private Button deleteBtn, editBtn;
     @FXML
-    private Button deleteBtn;
+    private Label eventNameLbl, eventPriorityLbl, eventDateLbl;
     @FXML
-    private Button editBtn;
-    @FXML
-    private TextField nameTxtF;
-    @FXML
-    private TextArea descTxtA;
-    @FXML
-    private TextField dateTxtF;
+    private TextArea eventDescTxtA;
     @FXML
     private TableView<DateEvent> eventTable;
     @FXML
     private TableColumn<DateEvent, LocalDate> dateColumn;
     @FXML
     private TableColumn<DateEvent, String> nameColumn;
+    @FXML
+    private TableColumn<DateEvent, Number> priorityColumn;
+
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
     private EventList eventList;
 
@@ -85,7 +82,7 @@ public class CalendarMainController {
             stage.setTitle("Event");
             stage.setResizable(false);
 
-            CalendarEventController eventController = loader.getController();
+            CalendarEventUIController eventController = loader.getController();
             eventController.setCurrentEvent(event);
             eventController.setDateTimeFormatter(dateTimeFormatter);
             eventController.setStage(stage);
@@ -102,19 +99,23 @@ public class CalendarMainController {
     private void modifyEventInfo(DateEvent event) {
         if (event != null) {
             String name = eventTable.getSelectionModel().getSelectedItem().getEventName();
-            LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventDate();
+            int priority = eventTable.getSelectionModel().getSelectedItem().getEventPriority();
+            LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventStartDate();
             String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
-            nameTxtF.setText(name);
-            dateTxtF.setText(dateTimeFormatter.format(date));
-            descTxtA.setText(description);
+            eventNameLbl.setText(name);
+            eventPriorityLbl.setText(convertPriorityToText(priority));
+            eventDateLbl.setText(dateTimeFormatter.format(date));
+            eventDescTxtA.setText(description);
         }
     }
 
     private void setupTableView() {
         eventTable.setItems(eventList.getEventList());
         nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
-        dateColumn.setCellValueFactory(cell -> cell.getValue().eventDateProperty());
+        dateColumn.setCellValueFactory(cell -> cell.getValue().eventStartDateProperty());
+        priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
         setDateColumnFormat();
+        setPriorityColumnFormat();
         setupItemListener();
         changeButtonsState();
     }
@@ -131,6 +132,24 @@ public class CalendarMainController {
             }
         });
     }
+
+    private void setPriorityColumnFormat() {
+        priorityColumn.setCellFactory(cell -> new TableCell<DateEvent, Number>() {
+            @Override
+            protected void updateItem(Number item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(convertPriorityToText(item));
+            }
+        });
+    }
+
+    private String convertPriorityToText(Number priority) {
+        return priority.equals(1) ? "High" : priority.equals(2) ? "Normal" : "Low";
+    }
+
 
     private void setupItemListener() {
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -157,9 +176,10 @@ public class CalendarMainController {
             deleteBtn.setDisable(true);
             editBtn.setDisable(true);
             editBtn.setVisible(false);
-            nameTxtF.clear();
-            dateTxtF.clear();
-            descTxtA.clear();
+            eventNameLbl.setText("<Name>");
+            eventPriorityLbl.setText("<Priority>");
+            eventDateLbl.setText("<Date>");
+            eventDescTxtA.clear();
         } else {
             deleteBtn.setDisable(false);
             editBtn.setDisable(false);

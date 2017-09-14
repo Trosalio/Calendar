@@ -18,18 +18,17 @@ import static javafx.scene.control.Alert.*;
  * Project Name: Calendar
  */
 
-public class CalendarEventController {
+public class CalendarEventUIController {
 
+    public CheckBox repeatChoiceBox;
     @FXML
-    private DatePicker datePicker;
+    private DatePicker startDatePicker;
     @FXML
     private TextArea eventDescTxtA;
     @FXML
     private TextField eventNameTxtF;
     @FXML
-    private Button cancelBtn;
-    @FXML
-    private Button saveBtn;
+    private RadioButton highBtn, normalBtn, lowBtn;
 
     private Boolean saveBool = false;
     private Stage stage;
@@ -48,10 +47,11 @@ public class CalendarEventController {
 
     @FXML
     private void onSave() {
-        if (isValidDate(datePicker.getValue())) {
+        if (isValidDate(startDatePicker.getValue())) {
             if (!eventNameTxtF.getText().isEmpty()) {
                 dateEvent.setEventName(eventNameTxtF.getText());
-                dateEvent.setEventDate(datePicker.getValue());
+                dateEvent.setEventPriority(getPriorityFromButton());
+                dateEvent.setEventStartDate(startDatePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
                 popDialog(AlertType.INFORMATION, "Success", "Event is saved!");
                 saveBool = true;
@@ -62,8 +62,13 @@ public class CalendarEventController {
             }
         } else {
             popDialog(AlertType.ERROR, "Error", "Date must not be in the past");
-            datePicker.setValue(LocalDate.now());
+            startDatePicker.setValue(LocalDate.now());
         }
+    }
+
+    @FXML
+    private void onRepeat(){
+        System.out.println("Hello");
     }
 
     private void popDialog(AlertType alertType, String title, String message) {
@@ -74,12 +79,16 @@ public class CalendarEventController {
         alertBox.showAndWait();
     }
 
+    private int getPriorityFromButton(){
+        return highBtn.isSelected() ? 1 : normalBtn.isSelected() ? 2 : 3;
+    }
+
     private boolean isValidDate(LocalDate currentDate) {
         return !currentDate.isBefore(LocalDate.now());
     }
 
     private void setDatePickerFormat(){
-        datePicker.setConverter(new StringConverter<LocalDate>() {
+        startDatePicker.setConverter(new StringConverter<LocalDate>() {
 
             @Override
             public String toString(LocalDate date) {
@@ -99,8 +108,9 @@ public class CalendarEventController {
                 }
             }
         });
-        datePicker.setValue(LocalDate.now());
+        startDatePicker.setValue(LocalDate.now());
     }
+
     public void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
         this.dateTimeFormatter = dateTimeFormatter;
     }

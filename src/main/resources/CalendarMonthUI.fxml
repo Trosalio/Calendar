@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarMonthUIController">
+   <top>
+      <BorderPane style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
+         <right>
+             <HBox alignment="CENTER_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
+                 <BorderPane.margin>
+                     <Insets />
+                 </BorderPane.margin>
+                 <Button mnemonicParsing="false" onAction="#onPrevMonthBtn" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #ccccff;" text="&lt;" textFill="WHITE">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Button>
+                 <Line endY="40.0" stroke="WHITE" />
+                 <Button mnemonicParsing="false" onAction="#onNextMonthBtn" prefHeight="50.0" prefWidth="50.0" style="-fx-background-color: #ccccff;" text="&gt;" textFill="WHITE">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Button>
+             </HBox>
+         </right>
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+         <left>
+            <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+                  <Label fx:id="monthLbl" text="&lt;Month&gt;" textFill="WHITE">
+                     <font>
+                        <Font name="Salsa-Regular" size="36.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="yearLbl" text="&lt;Year&gt;" textFill="WHITE">
+                     <font>
+                        <Font name="Salsa-Regular" size="36.0" />
+                     </font>
+                  </Label>
+            </HBox>
+         </left>
+         <bottom>
+             <GridPane prefHeight="60.0" BorderPane.alignment="CENTER">
+                 <columnConstraints>
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                     <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+                 </columnConstraints>
+                 <rowConstraints>
+                     <RowConstraints prefHeight="90.0" valignment="CENTER" vgrow="SOMETIMES" />
+                 </rowConstraints>
+                 <Label alignment="CENTER" text="Sun" textFill="WHITE">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+                 <Label alignment="CENTER" text="Mon" textFill="WHITE" GridPane.columnIndex="1">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+                 <Label alignment="CENTER" text="Tue" textFill="WHITE" GridPane.columnIndex="2">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+                 <Label alignment="CENTER" text="Wed" textFill="WHITE" GridPane.columnIndex="3">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+                 <Label alignment="CENTER" text="Thu" textFill="WHITE" GridPane.columnIndex="4">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+                 <Label alignment="CENTER" text="Fri" textFill="WHITE" GridPane.columnIndex="5">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+                 <Label alignment="CENTER" text="Sat" textFill="WHITE" GridPane.columnIndex="6">
+                    <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                    </font>
+                 </Label>
+             </GridPane>
+         </bottom>
+      </BorderPane>
+   </top>
+   <center>
+      <BorderPane BorderPane.alignment="CENTER">
+         <center>
+            <GridPane fx:id="gridPane" gridLinesVisible="true">
+              <columnConstraints>
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+                <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="150.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints minHeight="-Infinity" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="-Infinity" prefHeight="90.0" vgrow="SOMETIMES" />
+                  <RowConstraints minHeight="-Infinity" prefHeight="90.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="-Infinity" prefHeight="90.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="-Infinity" prefHeight="90.0" vgrow="SOMETIMES" />
+                <RowConstraints minHeight="-Infinity" prefHeight="90.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+            </GridPane>
+         </center>
+      </BorderPane>
+   </center>
+</BorderPane>

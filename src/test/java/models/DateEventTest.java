@@ -27,7 +27,7 @@ class DateEventTest {
         mockedEvent.setEventDescription("18/9/2015 - 12:00 to 15:00");
 
         mockedDate = LocalDate.now().plusDays(7);
-        mockedEvent.setEventDate(mockedDate);
+        mockedEvent.setEventStartDate(mockedDate);
     }
 
     @AfterAll
@@ -42,7 +42,7 @@ class DateEventTest {
 
     @Test
     void getEventDate() {
-        assertEquals(mockedEvent.getEventDate(), mockedDate);
+        assertEquals(mockedEvent.getEventStartDate(), mockedDate);
     }
 
     @Test

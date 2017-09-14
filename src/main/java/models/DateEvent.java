@@ -1,6 +1,7 @@
 package models;
 
 import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
@@ -15,63 +16,128 @@ import java.time.LocalDate;
 
 public class DateEvent {
 
-    private static int primaryKeyDateID;
+    private static int primaryKeyID;
 
-    private int DateID;
+    private int ID;
     private SimpleStringProperty eventName = new SimpleStringProperty(this, "eventName");
-    private ObjectProperty<LocalDate> eventDate = new SimpleObjectProperty<>(this, "eventDate");
+    private ObjectProperty<LocalDate> eventStartDate = new SimpleObjectProperty<>(this, "eventStartDate");
+    private SimpleIntegerProperty eventPriority = new SimpleIntegerProperty(this, "eventPriority");
     private SimpleStringProperty eventDescription = new SimpleStringProperty(this, "eventDescription");
+    private SimpleIntegerProperty repeatInterval = new SimpleIntegerProperty(this, "repeatInterval");
+    private SimpleIntegerProperty repeatMonth = new SimpleIntegerProperty(this, "repeatMonth");
+    private SimpleIntegerProperty repeatWeek = new SimpleIntegerProperty(this, "repeatWeek");
+    private SimpleIntegerProperty repeatDay = new SimpleIntegerProperty(this, "repeatDay");
 
-    public static int getPrimaryKeyDateID() {
-        return primaryKeyDateID;
+    public static int getPrimaryKeyID() {
+        return primaryKeyID;
     }
 
-    public static void setPrimaryKeyDateID(int primaryKeyDateID) {
-        DateEvent.primaryKeyDateID = primaryKeyDateID;
+    public static void setPrimaryKeyID(int primaryKeyID) {
+        DateEvent.primaryKeyID = primaryKeyID;
+    }
+
+    public int getID() {
+        return ID;
+    }
+
+    public void setID(int ID) {
+        this.ID = ID;
     }
 
     public String getEventName() {
         return eventName.get();
     }
 
-    public void setEventName(String eventName) {
-        this.eventName.set(eventName);
-    }
-
     public SimpleStringProperty eventNameProperty() {
         return eventName;
     }
 
-    public LocalDate getEventDate() {
-        return eventDate.get();
+    public void setEventName(String eventName) {
+        this.eventName.set(eventName);
     }
 
-    public void setEventDate(LocalDate eventDate) {
-        this.eventDate.set(eventDate);
+    public LocalDate getEventStartDate() {
+        return eventStartDate.get();
     }
 
-    public ObjectProperty<LocalDate> eventDateProperty() {
-        return eventDate;
+    public ObjectProperty<LocalDate> eventStartDateProperty() {
+        return eventStartDate;
+    }
+
+    public void setEventStartDate(LocalDate eventStartDate) {
+        this.eventStartDate.set(eventStartDate);
+    }
+
+    public int getEventPriority() {
+        return eventPriority.get();
+    }
+
+    public SimpleIntegerProperty eventPriorityProperty() {
+        return eventPriority;
+    }
+
+    public void setEventPriority(int eventPriority) {
+        this.eventPriority.set(eventPriority);
     }
 
     public String getEventDescription() {
         return eventDescription.get();
     }
 
+    public SimpleStringProperty eventDescriptionProperty() {
+        return eventDescription;
+    }
+
     public void setEventDescription(String eventDescription) {
         this.eventDescription.set(eventDescription);
     }
 
-    public int getDateID() {
-        return DateID;
+    public int getRepeatInterval() {
+        return repeatInterval.get();
     }
 
-    public void setDateID(int dateID) {
-        DateID = dateID;
+    public SimpleIntegerProperty repeatIntervalProperty() {
+        return repeatInterval;
     }
 
-    public SimpleStringProperty eventDescriptionProperty() {
-        return eventDescription;
+    public void setRepeatInterval(int repeatInterval) {
+        this.repeatInterval.set(repeatInterval);
+    }
+
+    public int getRepeatMonth() {
+        return repeatMonth.get();
+    }
+
+    public SimpleIntegerProperty repeatMonthProperty() {
+        return repeatMonth;
+    }
+
+    public void setRepeatMonth(int repeatMonth) {
+        this.repeatMonth.set(repeatMonth);
+    }
+
+    public int getRepeatWeek() {
+        return repeatWeek.get();
+    }
+
+    public SimpleIntegerProperty repeatWeekProperty() {
+        return repeatWeek;
+    }
+
+    public void setRepeatWeek(int repeatWeek) {
+        this.repeatWeek.set(repeatWeek);
+    }
+
+    public int getRepeatDay() {
+        return repeatDay.get();
+    }
+
+    public SimpleIntegerProperty repeatDayProperty() {
+        return repeatDay;
+    }
+
+    public void setRepeatDay(int repeatDay) {
+        this.repeatDay.set(repeatDay);
     }
 }
 

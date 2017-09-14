@@ -20,14 +20,14 @@ public class EventList {
     private DBManager dbManager;
 
     public void addEvent(DateEvent event) {
-        DateEvent.setPrimaryKeyDateID(DateEvent.getPrimaryKeyDateID() + 1);
-        event.setDateID(DateEvent.getPrimaryKeyDateID());
+        DateEvent.setPrimaryKeyID(DateEvent.getPrimaryKeyID() + 1);
+        event.setID(DateEvent.getPrimaryKeyID());
         eventList.add(event);
         if (dbManager != null) dbManager.insertEventRecord(event);
     }
 
     public void deleteEvent(int removeIndex) {
-        int removedDateIDKey = eventList.get(removeIndex).getDateID();
+        int removedDateIDKey = eventList.get(removeIndex).getID();
         eventList.remove(removeIndex);
         if (dbManager != null) dbManager.deleteEventRecord(removedDateIDKey);
     }
