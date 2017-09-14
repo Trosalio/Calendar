@@ -31,7 +31,7 @@ public class DBManager {
     public void insertEventRecord(DateEvent event) {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String insertSQL = "INSERT INTO DateEvent (eventName, eventPriority, eventDate, eventDescription) VALUES(?,?,?,?)";
+        String insertSQL = "INSERT INTO DateEvent (eventName, eventPriority, eventDate, eventDescription, isRecurred) VALUES(?,?,?,?,?)";
         try {
             conn = connectDB();
             pStmt = conn.prepareStatement(insertSQL);
@@ -39,6 +39,7 @@ public class DBManager {
             pStmt.setInt(2, event.getEventPriority());
             pStmt.setString(3, dateTimeFormatter.format(event.getEventStartDate()));
             pStmt.setString(4, event.getEventDescription());
+            pStmt.setInt(5, event.isRecurred() ? 1 : 0);
             pStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -66,7 +67,7 @@ public class DBManager {
     public void modifyEventRecord(DateEvent event) {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String updateSQL = "UPDATE DateEvent SET eventName = ?, eventPriority = ?, eventDate = ?, eventDescription = ? WHERE ID = ?";
+        String updateSQL = "UPDATE DateEvent SET eventName = ?, eventPriority = ?, eventDate = ?, eventDescription = ?, isRecurred = ? WHERE ID = ?";
         try {
             conn = connectDB();
             pStmt = conn.prepareStatement(updateSQL);
@@ -74,7 +75,8 @@ public class DBManager {
             pStmt.setInt(2, event.getEventPriority());
             pStmt.setString(3, dateTimeFormatter.format(event.getEventStartDate()));
             pStmt.setString(4, event.getEventDescription());
-            pStmt.setInt(5, event.getID());
+            pStmt.setInt(5, event.isRecurred() ? 1 : 0);
+            pStmt.setInt(6, event.getID());
             pStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -169,14 +171,18 @@ public class DBManager {
                 "eventName TEXT NOT NULL," +
                 "eventPriority INTEGER NOT NULL," +
                 "eventDate TEXT NOT NULL," +
-                "eventDescription TEXT)";
+                "eventDescription TEXT," +
+                "isRecurred INTEGER NOT NULL)";
         updateDatabase(createTableSQL);
         createTableSQL = "CREATE TABLE IF NOT EXISTS DateEventMeta" +
-                "(ID INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT," +
-                "eventID INTEGER NOT NULL," +
-                "repeatInterval INTEGER," + "repeatMonth INTEGER," + "repeatWeek INTEGER," +
+                "(eventID INTEGER NOT NULL," +
+                "nextAvailableDate TEXT NOT NULL," +
+                "repeatInterval INTEGER," +
+                "repeatMonth INTEGER," +
+                "repeatWeek INTEGER," +
                 "repeatDay INTEGER," +
                 "repeatWeekday INTEGER," +
+                "PRIMARY KEY(eventID)," +
                 "FOREIGN KEY(eventID) REFERENCES DateEvent(ID))";
         updateDatabase(createTableSQL);
     }
@@ -189,11 +195,13 @@ public class DBManager {
             int priority = rs.getInt("eventPriority");
             String date = rs.getString("eventDate");
             String desc = rs.getString("eventDescription");
+            boolean isRecurred = rs.getInt("isRecurred") == 1;
             event.setID(ID);
             event.setEventName(name);
             event.setEventPriority(priority);
             event.setEventStartDate(LocalDate.parse(date, dateTimeFormatter));
             event.setEventDescription(desc);
+            event.setRecurred(isRecurred);
             DateEvent.setPrimaryKeyID(rs.getInt("ID"));
             eventList.getEventList().add(event);
         }

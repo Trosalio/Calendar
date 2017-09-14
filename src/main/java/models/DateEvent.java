@@ -1,9 +1,6 @@
 package models;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.*;
 
 import java.time.LocalDate;
 
@@ -23,10 +20,19 @@ public class DateEvent {
     private ObjectProperty<LocalDate> eventStartDate = new SimpleObjectProperty<>(this, "eventStartDate");
     private SimpleIntegerProperty eventPriority = new SimpleIntegerProperty(this, "eventPriority");
     private SimpleStringProperty eventDescription = new SimpleStringProperty(this, "eventDescription");
+    private SimpleBooleanProperty recurred = new SimpleBooleanProperty(this,"recurred");
     private SimpleIntegerProperty repeatInterval = new SimpleIntegerProperty(this, "repeatInterval");
     private SimpleIntegerProperty repeatMonth = new SimpleIntegerProperty(this, "repeatMonth");
     private SimpleIntegerProperty repeatWeek = new SimpleIntegerProperty(this, "repeatWeek");
     private SimpleIntegerProperty repeatDay = new SimpleIntegerProperty(this, "repeatDay");
+
+    public DateEvent(){
+        setEventName("");
+        setEventPriority(1);
+        setEventStartDate(LocalDate.now());
+        setEventDescription("");
+        setRecurred(false);
+    }
 
     public static int getPrimaryKeyID() {
         return primaryKeyID;
@@ -90,6 +96,18 @@ public class DateEvent {
 
     public void setEventDescription(String eventDescription) {
         this.eventDescription.set(eventDescription);
+    }
+
+    public boolean isRecurred() {
+        return recurred.get();
+    }
+
+    public SimpleBooleanProperty recurredProperty() {
+        return recurred;
+    }
+
+    public void setRecurred(boolean recurred) {
+        this.recurred.set(recurred);
     }
 
     public int getRepeatInterval() {

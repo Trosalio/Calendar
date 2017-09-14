@@ -53,6 +53,7 @@ public class CalendarEventUIController {
                 dateEvent.setEventPriority(getPriorityFromButton());
                 dateEvent.setEventStartDate(startDatePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
+                dateEvent.setRecurred(repeatChoiceBox.isSelected());
                 popDialog(AlertType.INFORMATION, "Success", "Event is saved!");
                 saveBool = true;
                 closeWindow();
@@ -68,7 +69,7 @@ public class CalendarEventUIController {
 
     @FXML
     private void onRepeat(){
-        System.out.println("Hello");
+        // pop Recurrence Options Window -- to be implemented after exam week
     }
 
     private void popDialog(AlertType alertType, String title, String message) {
@@ -129,5 +130,20 @@ public class CalendarEventUIController {
 
     public void setCurrentEvent(DateEvent currentEvent) {
         dateEvent = currentEvent;
+        eventNameTxtF.setText(dateEvent.getEventName());
+        eventDescTxtA.setText(dateEvent.getEventDescription());
+        if(dateEvent.isRecurred()){
+            repeatChoiceBox.setSelected(true);
+            // additional implement -- to be implemented after exam week
+        }
+        if (dateEvent.getEventPriority() == 1) {
+            highBtn.setSelected(true);
+        } else {
+            if (dateEvent.getEventPriority() == 2) {
+                normalBtn.setSelected(true);
+            } else {
+                lowBtn.setSelected(true);
+            }
+        }
     }
 }

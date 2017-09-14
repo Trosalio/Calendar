@@ -28,17 +28,17 @@ public class CalendarMainUIController {
     @FXML
     private Button deleteBtn, editBtn;
     @FXML
-    private Label eventNameLbl, eventPriorityLbl, eventDateLbl;
+    private Label eventNameLbl, eventPriorityLbl, eventDateLbl, recurrenceLbl;
     @FXML
     private TextArea eventDescTxtA;
     @FXML
     private TableView<DateEvent> eventTable;
     @FXML
-    private TableColumn<DateEvent, LocalDate> dateColumn;
-    @FXML
     private TableColumn<DateEvent, String> nameColumn;
     @FXML
     private TableColumn<DateEvent, Number> priorityColumn;
+    @FXML
+    private TableColumn<DateEvent, LocalDate> dateColumn;
 
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
     private EventList eventList;
@@ -102,35 +102,24 @@ public class CalendarMainUIController {
             int priority = eventTable.getSelectionModel().getSelectedItem().getEventPriority();
             LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventStartDate();
             String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
+            Boolean isRecurred = eventTable.getSelectionModel().getSelectedItem().isRecurred();
             eventNameLbl.setText(name);
             eventPriorityLbl.setText(convertPriorityToText(priority));
             eventDateLbl.setText(dateTimeFormatter.format(date));
             eventDescTxtA.setText(description);
+            recurrenceLbl.setText(convertRecurrenceBooleanToText(isRecurred));
         }
     }
 
     private void setupTableView() {
         eventTable.setItems(eventList.getEventList());
         nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
-        dateColumn.setCellValueFactory(cell -> cell.getValue().eventStartDateProperty());
         priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
-        setDateColumnFormat();
         setPriorityColumnFormat();
+        dateColumn.setCellValueFactory(cell -> cell.getValue().eventStartDateProperty());
+        setDateColumnFormat();
         setupItemListener();
         changeButtonsState();
-    }
-
-    private void setDateColumnFormat() {
-        dateColumn.setCellFactory(cell -> new TableCell<DateEvent, LocalDate>() {
-            @Override
-            protected void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty)
-                    setText(null);
-                else
-                    setText(dateTimeFormatter.format(item));
-            }
-        });
     }
 
     private void setPriorityColumnFormat() {
@@ -150,6 +139,22 @@ public class CalendarMainUIController {
         return priority.equals(1) ? "High" : priority.equals(2) ? "Normal" : "Low";
     }
 
+    private String convertRecurrenceBooleanToText(Boolean isRecurred){
+        return isRecurred ? "Yes" : "No";
+    }
+
+    private void setDateColumnFormat() {
+        dateColumn.setCellFactory(cell -> new TableCell<DateEvent, LocalDate>() {
+            @Override
+            protected void updateItem(LocalDate item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty)
+                    setText(null);
+                else
+                    setText(dateTimeFormatter.format(item));
+            }
+        });
+    }
 
     private void setupItemListener() {
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
@@ -179,6 +184,7 @@ public class CalendarMainUIController {
             eventNameLbl.setText("<Name>");
             eventPriorityLbl.setText("<Priority>");
             eventDateLbl.setText("<Date>");
+            recurrenceLbl.setText("<IsRecurred, [<Recurrences>]>");
             eventDescTxtA.clear();
         } else {
             deleteBtn.setDisable(false);
