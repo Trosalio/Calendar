@@ -1,4 +1,4 @@
-import controllers.CalendarMainUIController;
+import controllers.MainUIController;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -24,31 +24,20 @@ public class CalendarApp extends Application {
 
         @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarMainUI.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
         Parent root = loader.load();
-
         EventList eventList = new EventList();
-        DBManager dbManager = new DBManager(eventList);
-        eventList.setDbManager(dbManager);
-        dbManager.loadDatabase();
-        CalendarMainUIController calendarMainUIController = loader.getController();
+//        DBManager dbManager = new DBManager(eventList);
+//        eventList.setDbManager(dbManager);
+//        dbManager.loadDatabase();
+        MainUIController mainUIController = loader.getController();
 
-        calendarMainUIController.setEventList(eventList);
+        mainUIController.setEventList(eventList);
 
         stage.setScene(new Scene(root));
         stage.setTitle("Calendar");
-        stage.setResizable(false);
+
+        stage.setResizable(true);
         stage.show();
     }
-//    @Override
-//    public void start(Stage primaryStage) throws Exception {
-//        FXMLLoader loader = new FXMLLoader(getClass().getResource("CalendarMonthUI.fxml"));
-//        Parent root = loader.load();
-//
-//        primaryStage.setScene(new Scene(root));
-//        primaryStage.setTitle("Calendar");
-//        primaryStage.setResizable(false);
-//        primaryStage.show();
-//    }
-
 }

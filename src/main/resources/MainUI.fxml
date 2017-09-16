@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Name:   Thanapong Supalak
+    ID:     5810405029
+    Project Name: Calendar
+-->
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.effect.DropShadow?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minWidth="1050.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainUIController">
+    <top>
+        <BorderPane style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
+            <left>
+                <Label text="Date Event List" textFill="WHITE" BorderPane.alignment="CENTER">
+                    <font>
+                        <Font name="Salsa-Regular" size="36.0" />
+                    </font>
+                    <BorderPane.margin>
+                        <Insets left="10.0" />
+                    </BorderPane.margin>
+                </Label>
+            </left>
+            <effect>
+                <DropShadow />
+            </effect>
+            <right>
+                <BorderPane BorderPane.alignment="CENTER">
+               <right>
+                        <Button mnemonicParsing="false" onAction="#onAdd" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Add " textFill="WHITE" BorderPane.alignment="CENTER">
+                            <font>
+                                <Font name="Salsa-Regular" size="18.0" />
+                            </font>
+                            <BorderPane.margin>
+                                <Insets />
+                            </BorderPane.margin>
+                        </Button>
+               </right>
+               <center>
+                        <Line endY="45.0" startY="15.0" stroke="WHITE" BorderPane.alignment="CENTER">
+                            <BorderPane.margin>
+                                <Insets left="10.0" right="10.0" />
+                            </BorderPane.margin>
+                        </Line>
+               </center>
+               <left>
+                  <Button fx:id="editBtn" disable="true" mnemonicParsing="false" onAction="#onEdit" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Edit" textFill="WHITE" visible="false" BorderPane.alignment="CENTER">
+                     <font>
+                        <Font name="Salsa-Regular" size="18.0" />
+                     </font>
+                     <BorderPane.margin>
+                        <Insets />
+                     </BorderPane.margin>
+                  </Button>
+               </left>
+               <BorderPane.margin>
+                  <Insets right="10.0" />
+               </BorderPane.margin>
+                </BorderPane>
+            </right>
+        </BorderPane>
+    </top>
+    <center>
+        <TabPane fx:id="tabPane" BorderPane.alignment="CENTER">
+            <Tab fx:id="dateListViewTab" closable="false" text="Date List View"/>
+            <Tab fx:id="monthlyViewTab" closable="false" text="Monthly View"/>
+        </TabPane>
+    </center>
+</BorderPane>

@@ -2,12 +2,15 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import models.DateEvent;
+import models.EventList;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 
 /**
  * ~Created by~
@@ -16,7 +19,7 @@ import java.time.LocalDate;
  * Project Name: Calendar
  */
 
-public class CalendarMonthUIController {
+public class MonthUIController {
 
     @FXML
     private Label monthLbl, yearLbl;
@@ -25,25 +28,19 @@ public class CalendarMonthUIController {
 
     private VBox[][] vBoxes;
 
-    private Label[][] dateLabels;
-
-    private LocalDate date;
-
+    private LocalDate baseDate;
+    private EventList eventList;
     @FXML
     public void initialize() {
-        date = LocalDate.now();
+        baseDate = LocalDate.now();
         initArrays(gridPane.getRowConstraints().size(), gridPane.getColumnConstraints().size());
-        updateMonthTable(date);
     }
 
     private void initArrays(int row, int column) {
         vBoxes = new VBox[row][column];
-        dateLabels = new Label[row][column];
         for (int i = 0; i < row; i++)
             for (int j = 0; j < column; j++) {
                 vBoxes[i][j] = new VBox();
-                dateLabels[i][j] = new Label();
-                vBoxes[i][j].getChildren().add(dateLabels[i][j]);
                 vBoxes[i][j].setPadding(new Insets(10, 10, 10, 10));
                 gridPane.add(vBoxes[i][j], j, i);
             }
@@ -57,26 +54,49 @@ public class CalendarMonthUIController {
         int indexDay = 0;
         for (int i = 0; i < gridPane.getRowConstraints().size(); i++) {
             for (int j = 0; j < gridPane.getColumnConstraints().size(); j++) {
+                vBoxes[i][j].getChildren().clear();
                 LocalDate currentDate = firstDateOfMonth.plusDays(indexDay - firstDayOfWeek);
-                dateLabels[i][j].setText(String.valueOf(currentDate.getDayOfMonth()));
-                if(currentDate.getMonth() != date.getMonth()){
-                    vBoxes[i][j].setDisable(true);
-                } else {
-                    vBoxes[i][j].setDisable(false);
-                }
+                setGridInfo(vBoxes[i][j], currentDate, eventList);
                 indexDay++;
+            }
+        }
+    }
+
+    private void setGridInfo(VBox vBox, LocalDate date, EventList list){
+        Label dateLabel = new Label(String.valueOf(date.getDayOfMonth()));
+        dateLabel.setFont(Font.font(14));
+        vBox.getChildren().add(dateLabel);
+        if(date.getMonth() != date.getMonth()){
+            dateLabel.setDisable(true);
+        } else {
+            dateLabel.setDisable(false);
+            if (date.isEqual(LocalDate.now())) {
+                dateLabel.setUnderline(true);
+            } else {
+                dateLabel.setUnderline(false);
+            }
+        }
+        for(DateEvent event : list.getEvents()){
+            long intervalDays = ChronoUnit.DAYS.between(event.getEventStartDate(), date);
+            if(intervalDays == 0){
+                vBox.getChildren().add(new Label(event.getEventName()));
             }
         }
     }
 
     @FXML
     private void onPrevMonthBtn() {
-        updateMonthTable(date = date.minusMonths(1));
+        updateMonthTable(baseDate = baseDate.minusMonths(1));
     }
 
     @FXML
     private void onNextMonthBtn() {
-        updateMonthTable(date = date.plusMonths(1));
+        updateMonthTable(baseDate = baseDate.plusMonths(1));
+    }
+
+    public void setEventList(EventList eventList) {
+        this.eventList = eventList;
+        updateMonthTable(baseDate);
     }
 }
 

@@ -32,19 +32,19 @@ class EventListTest {
     void addEvent() {
         DateEvent mockedEvent2 = new DateEvent();
         mockedEventList.addEvent(mockedEvent2);
-        assertEquals(mockedEventList.getEventList().size(), 2);
+        assertEquals(mockedEventList.getEvents().size(), 2);
     }
 
     @Test
     void deleteEvent() {
         mockedEventList.deleteEvent(0);
-        assertEquals(mockedEventList.getEventList().size(), 0);
-        assertTrue(mockedEventList.getEventList().isEmpty());
+        assertEquals(mockedEventList.getEvents().size(), 0);
+        assertTrue(mockedEventList.getEvents().isEmpty());
     }
 
     @Test
     void getEventList() {
-        assertNotNull(mockedEventList.getEventList());
+        assertNotNull(mockedEventList.getEvents());
     }
 
 }

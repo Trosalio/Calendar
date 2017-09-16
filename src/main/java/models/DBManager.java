@@ -67,8 +67,8 @@ public class DBManager {
     public void modifyEventRecord(DateEvent event) {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String updateSQL = "UPDATE DateEvent SET eventName = ?, eventPriority = ?, eventDate = ?, eventDescription = ?, isRecurred = ? WHERE ID = ?";
         try {
+            String updateSQL = "UPDATE DateEvent SET eventName = ?, eventPriority = ?, eventDate = ?, eventDescription = ?, isRecurred = ? WHERE ID = ?";
             conn = connectDB();
             pStmt = conn.prepareStatement(updateSQL);
             pStmt.setString(1, event.getEventName());
@@ -176,12 +176,12 @@ public class DBManager {
         updateDatabase(createTableSQL);
         createTableSQL = "CREATE TABLE IF NOT EXISTS DateEventMeta" +
                 "(eventID INTEGER NOT NULL," +
-                "nextAvailableDate TEXT NOT NULL," +
-                "repeatInterval INTEGER," +
+//                "nextAvailableDate TEXT NOT NULL," +
+//                "repeatInterval INTEGER," +
                 "repeatMonth INTEGER," +
                 "repeatWeek INTEGER," +
                 "repeatDay INTEGER," +
-                "repeatWeekday INTEGER," +
+//                "repeatWeekday INTEGER," +
                 "PRIMARY KEY(eventID)," +
                 "FOREIGN KEY(eventID) REFERENCES DateEvent(ID))";
         updateDatabase(createTableSQL);
@@ -202,8 +202,11 @@ public class DBManager {
             event.setEventStartDate(LocalDate.parse(date, dateTimeFormatter));
             event.setEventDescription(desc);
             event.setRecurred(isRecurred);
+            if(isRecurred){
+
+            }
             DateEvent.setPrimaryKeyID(rs.getInt("ID"));
-            eventList.getEventList().add(event);
+            eventList.getEvents().add(event);
         }
     }
 

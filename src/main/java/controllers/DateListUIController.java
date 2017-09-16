@@ -1,17 +1,10 @@
 package controllers;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
-
 import models.DateEvent;
 import models.EventList;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
@@ -21,12 +14,10 @@ import java.time.format.DateTimeFormatter;
  * ID:     5810405029
  * Project Name: Calendar
  */
-
-
-public class CalendarMainUIController {
+public class DateListUIController {
 
     @FXML
-    private Button deleteBtn, editBtn;
+    private Button deleteBtn;
     @FXML
     private Label eventNameLbl, eventPriorityLbl, eventDateLbl, recurrenceLbl;
     @FXML
@@ -40,79 +31,30 @@ public class CalendarMainUIController {
     @FXML
     private TableColumn<DateEvent, LocalDate> dateColumn;
 
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
+    private DateTimeFormatter dateTimeFormatter;
     private EventList eventList;
+    private Button editBtn;
 
     @FXML
-    private void onAdd() {
-        DateEvent event = new DateEvent();
-        if (popEventWindow(event)) {
-            eventList.addEvent(event);
-            changeButtonsState();
-        }
-    }
-
-    @FXML
-    private void onDelete() {
+    public void onDelete() {
         int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
         eventList.deleteEvent(removeIndex);
         changeButtonsState();
     }
 
-    @FXML
-    private void onEdit() {
-        DateEvent event = eventList.getCurrentEvent();
+    void modifyEventInfo(DateEvent event) {
         if (event != null) {
-            if (popEventWindow(event)) {
-                eventList.editEvent(event);
-                modifyEventInfo(event);
-            }
-        }
-    }
-
-    private boolean popEventWindow(DateEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader();
-            loader.setLocation(getClass().getResource("/CalendarEventUI.fxml"));
-            Parent root = loader.load();
-            Stage stage = new Stage();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
-            stage.initModality(Modality.APPLICATION_MODAL);
-            stage.setTitle("Event");
-            stage.setResizable(false);
-
-            CalendarEventUIController eventController = loader.getController();
-            eventController.setCurrentEvent(event);
-            eventController.setDateTimeFormatter(dateTimeFormatter);
-            eventController.setStage(stage);
-
-            stage.showAndWait();
-            return eventController.isSaved();
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-
-    private void modifyEventInfo(DateEvent event) {
-        if (event != null) {
-            String name = eventTable.getSelectionModel().getSelectedItem().getEventName();
-            int priority = eventTable.getSelectionModel().getSelectedItem().getEventPriority();
-            LocalDate date = eventTable.getSelectionModel().getSelectedItem().getEventStartDate();
-            String description = eventTable.getSelectionModel().getSelectedItem().getEventDescription();
-            Boolean isRecurred = eventTable.getSelectionModel().getSelectedItem().isRecurred();
-            eventNameLbl.setText(name);
-            eventPriorityLbl.setText(convertPriorityToText(priority));
-            eventDateLbl.setText(dateTimeFormatter.format(date));
-            eventDescTxtA.setText(description);
-            recurrenceLbl.setText(convertRecurrenceBooleanToText(isRecurred));
+            DateEvent currentEvent = eventTable.getSelectionModel().getSelectedItem();
+            eventNameLbl.setText(currentEvent.getEventName());
+            eventPriorityLbl.setText(convertPriorityToText(currentEvent.getEventPriority()));
+            eventDateLbl.setText(dateTimeFormatter.format(currentEvent.getEventStartDate()));
+            eventDescTxtA.setText(currentEvent.getEventDescription());
+            recurrenceLbl.setText(convertRecurrenceBooleanToText(currentEvent));
         }
     }
 
     private void setupTableView() {
-        eventTable.setItems(eventList.getEventList());
+        eventTable.setItems(eventList.getEvents());
         nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
         priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
         setPriorityColumnFormat();
@@ -139,8 +81,13 @@ public class CalendarMainUIController {
         return priority.equals(1) ? "High" : priority.equals(2) ? "Normal" : "Low";
     }
 
-    private String convertRecurrenceBooleanToText(Boolean isRecurred){
-        return isRecurred ? "Yes" : "No";
+    private String convertRecurrenceBooleanToText(DateEvent currentEvent) {
+        String reply = "No";
+        if (currentEvent.isRecurred()) {
+            reply = "Yes, ";
+            reply += currentEvent.isRepeatMonth() ? "Monthly" : currentEvent.isRepeatWeek() ? "Weekly" : "Daily";
+        }
+        return reply;
     }
 
     private void setDateColumnFormat() {
@@ -171,13 +118,8 @@ public class CalendarMainUIController {
         });
     }
 
-    public void setEventList(EventList eventList) {
-        this.eventList = eventList;
-        setupTableView();
-    }
-
-    private void changeButtonsState() {
-        if (eventList.getEventList().isEmpty()) {
+    void changeButtonsState() {
+        if (eventList.getEvents().isEmpty()) {
             deleteBtn.setDisable(true);
             editBtn.setDisable(true);
             editBtn.setVisible(false);
@@ -191,5 +133,18 @@ public class CalendarMainUIController {
             editBtn.setDisable(false);
             editBtn.setVisible(true);
         }
+    }
+
+    void setEventList(EventList eventList) {
+        this.eventList = eventList;
+        setupTableView();
+    }
+
+    void setEditBtn(Button editBtn) {
+        this.editBtn = editBtn;
+    }
+
+    void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
+        this.dateTimeFormatter = dateTimeFormatter;
     }
 }

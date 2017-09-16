@@ -19,19 +19,18 @@ public class DateEvent {
     private SimpleStringProperty eventName = new SimpleStringProperty(this, "eventName");
     private ObjectProperty<LocalDate> eventStartDate = new SimpleObjectProperty<>(this, "eventStartDate");
     private SimpleIntegerProperty eventPriority = new SimpleIntegerProperty(this, "eventPriority");
-    private SimpleStringProperty eventDescription = new SimpleStringProperty(this, "eventDescription");
-    private SimpleBooleanProperty recurred = new SimpleBooleanProperty(this,"recurred");
-    private SimpleIntegerProperty repeatInterval = new SimpleIntegerProperty(this, "repeatInterval");
-    private SimpleIntegerProperty repeatMonth = new SimpleIntegerProperty(this, "repeatMonth");
-    private SimpleIntegerProperty repeatWeek = new SimpleIntegerProperty(this, "repeatWeek");
-    private SimpleIntegerProperty repeatDay = new SimpleIntegerProperty(this, "repeatDay");
+    private String eventDescription;
+    private boolean recurred;
+    private int repeatInterval;
+    private boolean repeatMonth;
+    private boolean repeatWeek;
+    private boolean repeatDay;
 
     public DateEvent(){
         setEventName("");
         setEventPriority(1);
         setEventStartDate(LocalDate.now());
-        setEventDescription("");
-        setRecurred(false);
+        eventDescription = "";
     }
 
     public static int getPrimaryKeyID() {
@@ -87,75 +86,58 @@ public class DateEvent {
     }
 
     public String getEventDescription() {
-        return eventDescription.get();
-    }
-
-    public SimpleStringProperty eventDescriptionProperty() {
         return eventDescription;
     }
 
     public void setEventDescription(String eventDescription) {
-        this.eventDescription.set(eventDescription);
+        this.eventDescription = eventDescription;
     }
 
     public boolean isRecurred() {
-        return recurred.get();
-    }
-
-    public SimpleBooleanProperty recurredProperty() {
         return recurred;
     }
 
     public void setRecurred(boolean recurred) {
-        this.recurred.set(recurred);
+        this.recurred = recurred;
     }
 
     public int getRepeatInterval() {
-        return repeatInterval.get();
-    }
-
-    public SimpleIntegerProperty repeatIntervalProperty() {
         return repeatInterval;
     }
 
     public void setRepeatInterval(int repeatInterval) {
-        this.repeatInterval.set(repeatInterval);
+        this.repeatInterval = repeatInterval;
     }
 
-    public int getRepeatMonth() {
-        return repeatMonth.get();
-    }
-
-    public SimpleIntegerProperty repeatMonthProperty() {
+    public boolean isRepeatMonth() {
         return repeatMonth;
     }
 
-    public void setRepeatMonth(int repeatMonth) {
-        this.repeatMonth.set(repeatMonth);
+    public void setRepeatMonth(boolean repeatMonth) {
+        this.repeatMonth = repeatMonth;
     }
 
-    public int getRepeatWeek() {
-        return repeatWeek.get();
-    }
-
-    public SimpleIntegerProperty repeatWeekProperty() {
+    public boolean isRepeatWeek() {
         return repeatWeek;
     }
 
-    public void setRepeatWeek(int repeatWeek) {
-        this.repeatWeek.set(repeatWeek);
+    public void setRepeatWeek(boolean repeatWeek) {
+        this.repeatWeek = repeatWeek;
     }
 
-    public int getRepeatDay() {
-        return repeatDay.get();
-    }
-
-    public SimpleIntegerProperty repeatDayProperty() {
+    public boolean isRepeatDay() {
         return repeatDay;
     }
 
-    public void setRepeatDay(int repeatDay) {
-        this.repeatDay.set(repeatDay);
+    public void setRepeatDay(boolean repeatDay) {
+        this.repeatDay = repeatDay;
+    }
+
+    public void clearRepeatOptions() {
+        setRecurred(false);
+        repeatDay = false;
+        repeatWeek = false;
+        repeatMonth = false;
     }
 }
 

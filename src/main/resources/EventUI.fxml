@@ -18,12 +18,13 @@
 <?import javafx.scene.effect.DropShadow?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.TextFlow?>
 
-<BorderPane prefHeight="510.0" prefWidth="251.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.CalendarEventUIController">
+<BorderPane prefHeight="510.0" prefWidth="251.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.EventUIController">
     <top>
         <AnchorPane style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
             <Label alignment="CENTER" graphicTextGap="5.0" layoutY="8.0" text=" Event" textFill="WHITE" AnchorPane.leftAnchor="5.0">
@@ -116,13 +117,25 @@
                <padding>
                   <Insets bottom="30.0" />
                </padding>
-               <TextFlow>
-                  <CheckBox fx:id="repeatChoiceBox" mnemonicParsing="false" onAction="#onRepeat" text="Repeat...">
-                     <font>
-                        <Font name="Verdana" size="13.0" />
-                     </font>
-                  </CheckBox>
-               </TextFlow>
+               <VBox>
+                  <children>
+                     <CheckBox fx:id="repeatChoiceBox" mnemonicParsing="false" onAction="#onRepeat" text="Repeat...">
+                        <font>
+                           <Font name="Verdana" size="13.0" />
+                        </font>
+                     </CheckBox>
+                     <HBox fx:id="recurBox" alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="231.0" spacing="10.0">
+                        <RadioButton fx:id="dailyBtn" mnemonicParsing="false" selected="true" text="Daily">
+                           <toggleGroup>
+                              <ToggleGroup fx:id="recurGroup"/>
+                           </toggleGroup>
+                        </RadioButton>
+                        <RadioButton fx:id="weeklyBtn" mnemonicParsing="false" text="Weekly" toggleGroup="$recurGroup"/>
+                        <RadioButton fx:id="monthlyBtn" mnemonicParsing="false" text="Monthly"
+                                     toggleGroup="$recurGroup"/>
+                     </HBox>
+                  </children>
+               </VBox>
             </VBox>
          </VBox>
          <VBox alignment="CENTER_LEFT" spacing="5.0">
@@ -134,11 +147,11 @@
             <TextFlow>
                <RadioButton fx:id="highBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="50.0" selected="true" text="High">
                   <toggleGroup>
-                     <ToggleGroup fx:id="priority" />
+                     <ToggleGroup fx:id="priorityGroup" />
                   </toggleGroup>
                </RadioButton>
-               <RadioButton fx:id="normalBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="65.0" text="Normal" toggleGroup="$priority" />
-               <RadioButton fx:id="lowBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="45.0" text="Low" toggleGroup="$priority" />
+               <RadioButton fx:id="normalBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="65.0" text="Normal" toggleGroup="$priorityGroup" />
+               <RadioButton fx:id="lowBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="45.0" text="Low" toggleGroup="$priorityGroup" />
             </TextFlow>
          </VBox>
          <VBox alignment="CENTER_LEFT" spacing="5.0">
