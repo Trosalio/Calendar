@@ -1,5 +1,7 @@
 package models;
 
+import org.sqlite.SQLiteConfig;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.*;
@@ -31,8 +33,9 @@ public class DBManager {
     public void insertEventRecord(DateEvent event) {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String insertSQL = "INSERT INTO DateEvent (eventName, eventPriority, eventDate, eventDescription, isRecurred) VALUES(?,?,?,?,?)";
+
         try {
+            String insertSQL = "INSERT INTO DateEvent (eventName, eventPriority, eventDate, eventDescription, isRecurred) VALUES(?,?,?,?,?)";
             conn = connectDB();
             pStmt = conn.prepareStatement(insertSQL);
             pStmt.setString(1, event.getEventName());
@@ -41,6 +44,22 @@ public class DBManager {
             pStmt.setString(4, event.getEventDescription());
             pStmt.setInt(5, event.isRecurred() ? 1 : 0);
             pStmt.executeUpdate();
+            if (event.isRecurred()) {
+                ResultSet rs = pStmt.getGeneratedKeys();
+                int fkID = -1;
+                if (rs.next()) {
+                    fkID = rs.getInt(1);
+                }
+                rs.close();
+                insertSQL = "INSERT INTO DateEventMeta(eventID, repeatInterval, repeatMonth, repeatWeek, repeatDay) VALUES(?,?,?,?,?)";
+                pStmt = conn.prepareStatement(insertSQL);
+                pStmt.setInt(1, fkID);
+                pStmt.setInt(2, event.getRepeatInterval());
+                pStmt.setInt(3, event.isRepeatMonth() ? 1 : 0);
+                pStmt.setInt(4, event.isRepeatWeek() ? 1 : 0);
+                pStmt.setInt(5, event.isRepeatDay() ? 1 : 0);
+                pStmt.executeUpdate();
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -60,7 +79,10 @@ public class DBManager {
     public void deleteEventRecord(int ID) {
         String deleteSQL = String.format("DELETE FROM DateEvent WHERE ID = %d", ID);
         updateDatabase(deleteSQL);
-        deleteSQL = String.format("DELETE FROM DateEventMeta WHERE eventID = %d", ID);
+    }
+
+    public void deleteRecurRecord(int ID) {
+        String deleteSQL = String.format("DELETE FROM DateEventMeta WHERE eventID = %d", ID);
         updateDatabase(deleteSQL);
     }
 
@@ -78,6 +100,19 @@ public class DBManager {
             pStmt.setInt(5, event.isRecurred() ? 1 : 0);
             pStmt.setInt(6, event.getID());
             pStmt.executeUpdate();
+            if (event.isRecurred()) {
+                pStmt.close();
+                updateSQL = "UPDATE DateEventMeta SET repeatInterval = ?, repeatMonth = ?, repeatWeek = ?, repeatDay = ? WHERE eventID = ?";
+                pStmt = conn.prepareStatement(updateSQL);
+                pStmt.setInt(1, event.getRepeatInterval());
+                pStmt.setInt(2, event.isRepeatMonth() ? 1 : 0);
+                pStmt.setInt(3, event.isRepeatWeek() ? 1 : 0);
+                pStmt.setInt(4, event.isRepeatDay() ? 1 : 0);
+                pStmt.setInt(5, event.getID());
+                pStmt.executeUpdate();
+            } else {
+                deleteRecurRecord(event.getID());
+            }
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -113,14 +148,17 @@ public class DBManager {
     public void loadDatabase() {
         Connection conn = null;
         PreparedStatement pStmt = null;
-        String selectSQL = "SELECT * FROM DateEvent";
         try {
+            String selectSQL = "SELECT * FROM DateEvent WHERE isRecurred = 0";
             conn = connectDB();
             pStmt = conn.prepareStatement(selectSQL);
             ResultSet resultSet = pStmt.executeQuery();
             pullDataToEventList(resultSet);
             resultSet.close();
-
+            selectSQL = "SELECT * FROM DateEvent INNER JOIN DateEventMeta WHERE ID = eventID";
+            resultSet = conn.prepareStatement(selectSQL).executeQuery();
+            pullDataToEventList(resultSet);
+            resultSet.close();
             selectSQL = "SELECT seq FROM sqlite_sequence WHERE name = 'DateEvent'";
             resultSet = conn.prepareStatement(selectSQL).executeQuery();
             int pkID = resultSet.next() ? resultSet.getInt(1) : 1;
@@ -176,14 +214,12 @@ public class DBManager {
         updateDatabase(createTableSQL);
         createTableSQL = "CREATE TABLE IF NOT EXISTS DateEventMeta" +
                 "(eventID INTEGER NOT NULL," +
-//                "nextAvailableDate TEXT NOT NULL," +
-//                "repeatInterval INTEGER," +
+                "repeatInterval INTEGER," +
                 "repeatMonth INTEGER," +
                 "repeatWeek INTEGER," +
                 "repeatDay INTEGER," +
-//                "repeatWeekday INTEGER," +
-                "PRIMARY KEY(eventID)," +
-                "FOREIGN KEY(eventID) REFERENCES DateEvent(ID))";
+                "FOREIGN KEY(eventID) REFERENCES DateEvent(ID)," +
+                "PRIMARY KEY(eventID))";
         updateDatabase(createTableSQL);
     }
 
@@ -202,8 +238,11 @@ public class DBManager {
             event.setEventStartDate(LocalDate.parse(date, dateTimeFormatter));
             event.setEventDescription(desc);
             event.setRecurred(isRecurred);
-            if(isRecurred){
-
+            if (isRecurred) {
+                event.setRepeatInterval(rs.getInt("repeatInterval"));
+                event.setRepeatMonth(rs.getInt("repeatMonth") == 1);
+                event.setRepeatWeek(rs.getInt("repeatWeek") == 1);
+                event.setRepeatDay(rs.getInt("repeatDay") == 1);
             }
             DateEvent.setPrimaryKeyID(rs.getInt("ID"));
             eventList.getEvents().add(event);

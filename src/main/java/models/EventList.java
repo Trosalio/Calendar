@@ -27,9 +27,14 @@ public class EventList {
     }
 
     public void deleteEvent(int removeIndex) {
-        int removedDateIDKey = events.get(removeIndex).getID();
+        DateEvent removedEvent = events.get(removeIndex);
         events.remove(removeIndex);
-        if (dbManager != null) dbManager.deleteEventRecord(removedDateIDKey);
+        if (dbManager != null) {
+            if(removedEvent.isRecurred()){
+                dbManager.deleteRecurRecord(removedEvent.getID());
+            }
+            dbManager.deleteEventRecord(removedEvent.getID());
+        }
     }
 
     public void editEvent(DateEvent event) {

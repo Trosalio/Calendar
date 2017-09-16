@@ -31,6 +31,7 @@ public class DateEvent {
         setEventPriority(1);
         setEventStartDate(LocalDate.now());
         eventDescription = "";
+        repeatInterval = 1;
     }
 
     public static int getPrimaryKeyID() {

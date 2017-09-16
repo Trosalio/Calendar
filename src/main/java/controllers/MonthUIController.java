@@ -30,6 +30,7 @@ public class MonthUIController {
 
     private LocalDate baseDate;
     private EventList eventList;
+
     @FXML
     public void initialize() {
         baseDate = LocalDate.now();
@@ -56,17 +57,17 @@ public class MonthUIController {
             for (int j = 0; j < gridPane.getColumnConstraints().size(); j++) {
                 vBoxes[i][j].getChildren().clear();
                 LocalDate currentDate = firstDateOfMonth.plusDays(indexDay - firstDayOfWeek);
-                setGridInfo(vBoxes[i][j], currentDate, eventList);
+                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth, eventList);
                 indexDay++;
             }
         }
     }
 
-    private void setGridInfo(VBox vBox, LocalDate date, EventList list){
+    private void setGridInfo(VBox vBox, LocalDate date, LocalDate firstDate, EventList list) {
         Label dateLabel = new Label(String.valueOf(date.getDayOfMonth()));
         dateLabel.setFont(Font.font(14));
         vBox.getChildren().add(dateLabel);
-        if(date.getMonth() != date.getMonth()){
+        if (date.getMonth() != firstDate.getMonth()) {
             dateLabel.setDisable(true);
         } else {
             dateLabel.setDisable(false);
@@ -75,13 +76,32 @@ public class MonthUIController {
             } else {
                 dateLabel.setUnderline(false);
             }
-        }
-        for(DateEvent event : list.getEvents()){
-            long intervalDays = ChronoUnit.DAYS.between(event.getEventStartDate(), date);
-            if(intervalDays == 0){
-                vBox.getChildren().add(new Label(event.getEventName()));
+            for (DateEvent event : list.getEvents()) {
+                if (!date.isBefore(event.getEventStartDate())) {
+                    if (!event.isRecurred()) {
+                        if (date.isEqual(event.getEventStartDate()))
+                            vBox.getChildren().add(new Label(event.getEventName()));
+                    } else {
+                        long intervalUnit = -1L;
+                        if (event.isRepeatDay()) {
+                            intervalUnit = ChronoUnit.DAYS.between(event.getEventStartDate(), date);
+                        } else if (event.isRepeatWeek()) {
+                            if (date.getDayOfWeek().equals(event.getEventStartDate().getDayOfWeek())) {
+                                intervalUnit = ChronoUnit.WEEKS.between(event.getEventStartDate(), date);
+                            }
+                        } else if (event.isRepeatMonth()) {
+                            if (date.getDayOfMonth() == event.getEventStartDate().getDayOfMonth()) {
+                                intervalUnit = ChronoUnit.MONTHS.between(event.getEventStartDate(), date);
+                            }
+                        }
+                        if (intervalUnit != -1L && intervalUnit % (event.getRepeatInterval()) == 0) {
+                            vBox.getChildren().add(new Label(event.getEventName()));
+                        }
+                    }
+                }
             }
         }
+
     }
 
     @FXML
@@ -94,9 +114,19 @@ public class MonthUIController {
         updateMonthTable(baseDate = baseDate.plusMonths(1));
     }
 
+    @FXML
+    private void onRefreshBtn() {
+        refreshTable();
+    }
+
+    public void refreshTable() {
+        updateMonthTable(baseDate);
+    }
+
     public void setEventList(EventList eventList) {
         this.eventList = eventList;
         updateMonthTable(baseDate);
     }
+
 }
 

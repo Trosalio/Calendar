@@ -24,14 +24,14 @@ public class CalendarApp extends Application {
 
         @Override
     public void start(Stage stage) throws IOException {
+        MainUIController mainUIController = new MainUIController();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("MainUI.fxml"));
+        loader.setController(mainUIController);
         Parent root = loader.load();
         EventList eventList = new EventList();
-//        DBManager dbManager = new DBManager(eventList);
-//        eventList.setDbManager(dbManager);
-//        dbManager.loadDatabase();
-        MainUIController mainUIController = loader.getController();
-
+        DBManager dbManager = new DBManager(eventList);
+        eventList.setDbManager(dbManager);
+        dbManager.loadDatabase();
         mainUIController.setEventList(eventList);
 
         stage.setScene(new Scene(root));
