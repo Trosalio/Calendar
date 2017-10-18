@@ -12,39 +12,39 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EventListTest {
 
-    private EventList mockedEventList;
+    private EventManager mockedEventManager;
     private DateEvent mockedEvent;
 
     @BeforeEach
     void init(){
-        mockedEventList = new EventList();
+        mockedEventManager = new EventManager();
         mockedEvent = new DateEvent();
-        mockedEventList.addEvent(mockedEvent);
+        mockedEventManager.addEvent(mockedEvent);
     }
 
     @AfterEach
     void tearDown(){
-        mockedEventList = null;
+        mockedEventManager = null;
         mockedEvent = null;
     }
 
     @Test
     void addEvent() {
         DateEvent mockedEvent2 = new DateEvent();
-        mockedEventList.addEvent(mockedEvent2);
-        assertEquals(mockedEventList.getEvents().size(), 2);
+        mockedEventManager.addEvent(mockedEvent2);
+        assertEquals(mockedEventManager.getEvents().size(), 2);
     }
 
     @Test
     void deleteEvent() {
-        mockedEventList.deleteEvent(0);
-        assertEquals(mockedEventList.getEvents().size(), 0);
-        assertTrue(mockedEventList.getEvents().isEmpty());
+        mockedEventManager.deleteEvent(0);
+        assertEquals(mockedEventManager.getEvents().size(), 0);
+        assertTrue(mockedEventManager.getEvents().isEmpty());
     }
 
     @Test
     void getEventList() {
-        assertNotNull(mockedEventList.getEvents());
+        assertNotNull(mockedEventManager.getEvents());
     }
 
 }

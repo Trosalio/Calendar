@@ -6,11 +6,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import models.DateEvent;
-import models.EventList;
+import models.EventManager;
 
 import java.io.IOException;
 import java.time.format.DateTimeFormatter;
@@ -26,83 +27,54 @@ import java.time.format.DateTimeFormatter;
 public class MainUIController {
 
     @FXML
-    private Button editBtn;
+    private HBox stateBox;
     @FXML
     private TabPane tabPane;
     @FXML
     private Tab dateListViewTab, monthlyViewTab;
     private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
-    private EventList eventList;
+    private EventManager eventManager;
     private DateListUIController dateListUIController = new DateListUIController();
     private MonthUIController monthUIController = new MonthUIController();
-
-    @FXML
-    public void initialize() {
-        try {
-            FXMLLoader dateListUILoader = new FXMLLoader();
-            dateListUILoader.setLocation(getClass().getResource("/DateListUI.fxml"));
-            dateListUILoader.setController(dateListUIController);
-            Parent dateViewScene = dateListUILoader.load();
-            dateListUIController.setEditBtn(editBtn);
-            dateListUIController.setDateTimeFormatter(dateTimeFormatter);
-            dateListViewTab.setContent(dateViewScene);
-
-
-            FXMLLoader monthUILoader = new FXMLLoader();
-            monthUILoader.setLocation(getClass().getResource("/MonthUI.fxml"));
-            monthUILoader.setController(monthUIController);
-            Parent monthlyViewScene = monthUILoader.load();
-            monthlyViewTab.setContent(monthlyViewScene);
-
-            tabPane.getSelectionModel().select(dateListViewTab);
-            setUpTabListener();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     @FXML
     private void onAdd() {
         DateEvent event = new DateEvent();
         if (popEventWindow(event)) {
-            eventList.addEvent(event);
+            eventManager.addEvent(event);
             dateListUIController.changeButtonsState();
         }
     }
 
     @FXML
+    public void onDelete() {
+        dateListUIController.deleteEvent();
+        dateListUIController.changeButtonsState();
+    }
+
+    @FXML
     private void onEdit() {
-        DateEvent event = eventList.getCurrentEvent();
+        DateEvent event = eventManager.getCurrentEvent();
         if (event != null) {
             if (popEventWindow(event)) {
-                eventList.editEvent(event);
+                eventManager.editEvent(event);
                 dateListUIController.modifyEventInfo(event);
             }
         }
     }
 
-    private void setUpTabListener(){
-        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(monthlyViewTab)){
-                monthUIController.refreshTable();
-            }
-        });
-    }
     private boolean popEventWindow(DateEvent event) {
         try {
-            EventUIController eventController = new EventUIController();
-            FXMLLoader eventUILoader = new FXMLLoader();
-            eventUILoader.setLocation(getClass().getResource("/EventUI.fxml"));
-            eventUILoader.setController(eventController);
+            FXMLLoader eventUILoader = new FXMLLoader(getClass().getResource("/EventUI.fxml"));
             Parent root = eventUILoader.load();
+            EventUIController eventController = eventUILoader.getController();
+
             Stage stage = new Stage();
             Scene scene = new Scene(root);
             stage.setScene(scene);
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.setTitle("Event");
             stage.setResizable(false);
-
 
             eventController.setCurrentEvent(event);
             eventController.setDateTimeFormatter(dateTimeFormatter);
@@ -117,10 +89,46 @@ public class MainUIController {
         }
     }
 
-    public void setEventList(EventList eventList) {
-        this.eventList = eventList;
-        this.dateListUIController.setEventList(eventList);
-        this.monthUIController.setEventList(eventList);
+    public void initUITabs(){
+        try {
+            createMonthUITab();
+            createDateListUITab();
+            tabPane.getSelectionModel().select(monthlyViewTab);
+            setUpTabListener();
+        } catch (IOException e) {
+            System.err.println("Exception Caught: " + e);
+            System.err.println("Possibility: Tabs aren't initialize properly");
+        }
     }
 
+    private void createDateListUITab() throws IOException {
+        FXMLLoader dateListUILoader = new FXMLLoader(getClass().getResource("/DateListUI.fxml"));
+        Parent dateViewScene = dateListUILoader.load();
+        dateListUIController = dateListUILoader.getController();
+        dateListUIController.attachHBoxState(stateBox);
+        dateListUIController.setEventManager(eventManager);
+        dateListUIController.setDateTimeFormatter(dateTimeFormatter);
+        dateListViewTab.setContent(dateViewScene);
+    }
+
+    private void createMonthUITab() throws IOException {
+        FXMLLoader monthUILoader = new FXMLLoader(getClass().getResource("/MonthUI.fxml"));
+        Parent monthlyViewScene = monthUILoader.load();
+        monthUIController = monthUILoader.getController();
+        monthUIController.setEventManager(eventManager);
+        monthlyViewTab.setContent(monthlyViewScene);
+    }
+
+    private void setUpTabListener(){
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            if(newValue.equals(monthlyViewTab)){
+                monthUIController.refreshTable();
+            }
+        });
+    }
+
+    public void setEventManager(EventManager eventManager) {
+        this.eventManager = eventManager;
+
+    }
 }

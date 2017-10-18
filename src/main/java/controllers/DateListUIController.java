@@ -2,8 +2,9 @@ package controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.layout.HBox;
 import models.DateEvent;
-import models.EventList;
+import models.EventManager;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -14,10 +15,10 @@ import java.time.format.DateTimeFormatter;
  * ID:     5810405029
  * Project Name: Calendar
  */
+
 public class DateListUIController {
 
-    @FXML
-    private Button deleteBtn;
+
     @FXML
     private Label eventNameLbl, eventPriorityLbl, eventDateLbl, recurrenceLbl;
     @FXML
@@ -32,13 +33,12 @@ public class DateListUIController {
     private TableColumn<DateEvent, LocalDate> dateColumn;
 
     private DateTimeFormatter dateTimeFormatter;
-    private EventList eventList;
-    private Button editBtn;
+    private EventManager eventManager;
+    private HBox hBoxState;
 
-    @FXML
-    public void onDelete() {
+    public void deleteEvent() {
         int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
-        eventList.deleteEvent(removeIndex);
+        eventManager.deleteEvent(removeIndex);
         changeButtonsState();
     }
 
@@ -54,7 +54,7 @@ public class DateListUIController {
     }
 
     private void setupTableView() {
-        eventTable.setItems(eventList.getEvents());
+        eventTable.setItems(eventManager.getEvents());
         nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
         priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
         setPriorityColumnFormat();
@@ -105,11 +105,11 @@ public class DateListUIController {
 
     private void setupItemListener() {
         eventTable.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            eventList.setCurrentEvent(newSelection);
+            eventManager.setCurrentEvent(newSelection);
             modifyEventInfo(newSelection);
         });
 
-        eventList.currentEventProperty().addListener((obs, oldSelection, newSelection) -> {
+        eventManager.currentEventProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection == null) {
                 eventTable.getSelectionModel().clearSelection();
             } else {
@@ -119,29 +119,27 @@ public class DateListUIController {
     }
 
     void changeButtonsState() {
-        if (eventList.getEvents().isEmpty()) {
-            deleteBtn.setDisable(true);
-            editBtn.setDisable(true);
-            editBtn.setVisible(false);
+        if (eventManager.getEvents().isEmpty()) {
+            hBoxState.setDisable(true);
+            hBoxState.setVisible(false);
             eventNameLbl.setText("<Name>");
             eventPriorityLbl.setText("<Priority>");
             eventDateLbl.setText("<Date>");
             recurrenceLbl.setText("<IsRecurred, [<Recurrences>]>");
             eventDescTxtA.clear();
         } else {
-            deleteBtn.setDisable(false);
-            editBtn.setDisable(false);
-            editBtn.setVisible(true);
+            hBoxState.setDisable(false);
+            hBoxState.setVisible(true);
         }
     }
 
-    void setEventList(EventList eventList) {
-        this.eventList = eventList;
-        setupTableView();
+    public void attachHBoxState(HBox hBoxState){
+        this.hBoxState = hBoxState;
     }
 
-    void setEditBtn(Button editBtn) {
-        this.editBtn = editBtn;
+    void setEventManager(EventManager eventManager) {
+        this.eventManager = eventManager;
+        setupTableView();
     }
 
     void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {

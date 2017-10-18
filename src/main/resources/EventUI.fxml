@@ -6,23 +6,12 @@
     Project Name: Calendar
 -->
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.CheckBox?>
-<?import javafx.scene.control.DatePicker?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.RadioButton?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleGroup?>
-<?import javafx.scene.effect.DropShadow?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.text.Font?>
-<?import javafx.scene.text.TextFlow?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
 
 <!--
     Name:   Thanapong Supalak
@@ -30,72 +19,72 @@
     Project Name: Calendar
 -->
 
-<BorderPane prefHeight="510.0" prefWidth="251.0" style="-fx-background-color: #ffffff;"
-            xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="510.0" prefWidth="251.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.EventUIController">
     <top>
-        <AnchorPane style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
+        <AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                    style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
+            <effect>
+                <DropShadow color="#24229a"/>
+            </effect>
             <Label alignment="CENTER" graphicTextGap="5.0" layoutY="8.0" text=" Event" textFill="WHITE"
                    AnchorPane.leftAnchor="5.0">
                 <font>
                     <Font name="Salsa-Regular" size="36.0"/>
                 </font>
             </Label>
-            <effect>
-                <DropShadow color="#24229a"/>
-            </effect>
         </AnchorPane>
     </top>
     <bottom>
-        <BorderPane prefHeight="28.0" prefWidth="251.0" style="-fx-background-color: #ccccff;"
-                    BorderPane.alignment="CENTER">
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="28.0" prefWidth="251.0" style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
             <right>
-                <Button onAction="#onSave" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ccccff;"
-                        text="Save" BorderPane.alignment="CENTER">
+                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onSave" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ccccff;" text="Save" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
-                        <Insets left="5.0" right="5.0"/>
+                        <Insets left="5.0" right="5.0" />
                     </BorderPane.margin>
                     <font>
-                        <Font name="Verdana" size="13.0"/>
+                        <Font name="Verdana" size="13.0" />
                     </font>
                 </Button>
             </right>
             <left>
-                <Button onAction="#onCancel" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ccccff;"
-                        text="Cancel" BorderPane.alignment="CENTER">
+                <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" onAction="#onCancel" prefHeight="40.0" prefWidth="110.0" style="-fx-background-color: #ccccff;" text="Cancel" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
-                        <Insets left="5.0" right="5.0"/>
+                        <Insets left="5.0" right="5.0" />
                     </BorderPane.margin>
                     <font>
-                        <Font name="Verdana" size="13.0"/>
+                        <Font name="Verdana" size="13.0" />
                     </font>
                 </Button>
             </left>
             <center>
                 <Line endY="39.0" stroke="WHITE" BorderPane.alignment="CENTER">
                     <BorderPane.margin>
-                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0"/>
+                        <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
                     </BorderPane.margin>
                     <effect>
-                        <DropShadow color="#b561fa"/>
+                        <DropShadow color="#b561fa" />
                     </effect>
                 </Line>
             </center>
             <effect>
-                <DropShadow color="#38328f"/>
+                <DropShadow color="#38328f" />
             </effect>
         </BorderPane>
     </bottom>
     <center>
-        <VBox prefWidth="231.0" spacing="15.0" BorderPane.alignment="CENTER">
+        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefWidth="231.0" spacing="15.0"
+              BorderPane.alignment="CENTER">
             <BorderPane.margin>
                 <Insets bottom="10.0" left="10.0" right="10.0" top="10.0"/>
             </BorderPane.margin>
-            <VBox spacing="10.0">
+            <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
                 <opaqueInsets>
                     <Insets/>
                 </opaqueInsets>
-                <VBox alignment="CENTER_LEFT" spacing="5.0">
-                    <Label text="Event Name">
+                <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                      spacing="5.0">
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                           text="Event Name">
                         <font>
                             <Font name="Verdana" size="13.0"/>
                         </font>
@@ -103,7 +92,8 @@
                             <Insets/>
                         </VBox.margin>
                     </Label>
-                    <TextField fx:id="eventNameTxtF" promptText="Add name event..">
+                    <TextField fx:id="eventNameTxtF" maxHeight="1.7976931348623157E308"
+                               maxWidth="1.7976931348623157E308" promptText="Add name event..">
                         <font>
                             <Font name="Verdana" size="13.0"/>
                         </font>
@@ -112,13 +102,16 @@
                         </VBox.margin>
                     </TextField>
                 </VBox>
-                <VBox alignment="CENTER_LEFT" spacing="5.0">
-                    <Label text="Start Date">
+                <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                      spacing="5.0">
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                           text="Start Date">
                         <font>
                             <Font size="13.0"/>
                         </font>
                     </Label>
-                    <DatePicker fx:id="startDatePicker" editable="false" prefWidth="200.0">
+                    <DatePicker fx:id="startDatePicker" editable="false" maxHeight="1.7976931348623157E308"
+                                maxWidth="1.7976931348623157E308">
                         <VBox.margin>
                             <Insets/>
                         </VBox.margin>
@@ -129,60 +122,74 @@
                         <Insets bottom="30.0"/>
                     </padding>
                     <VBox>
-                        <CheckBox fx:id="repeatChoiceBox" mnemonicParsing="false" onAction="#onRepeat"
-                                  text="Repeat...">
+                        <CheckBox fx:id="repeatChoiceBox" maxHeight="1.7976931348623157E308"
+                                  maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                  onAction="#onRepeat" text="Repeat...">
                             <font>
                                 <Font name="Verdana" size="13.0"/>
                             </font>
                         </CheckBox>
-                        <HBox fx:id="recurBox" alignment="CENTER_LEFT" prefHeight="61.0" prefWidth="231.0"
+                        <HBox fx:id="recurBox" alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308"
+                              maxWidth="1.7976931348623157E308" prefHeight="61.0" prefWidth="231.0"
                               spacing="10.0">
-                            <RadioButton fx:id="dailyBtn" mnemonicParsing="false" selected="true" text="Daily">
+                            <RadioButton fx:id="dailyBtn" maxHeight="1.7976931348623157E308"
+                                         maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                         selected="true" text="Daily">
                                 <toggleGroup>
                                     <ToggleGroup fx:id="recurGroup"/>
                                 </toggleGroup>
                             </RadioButton>
-                            <RadioButton fx:id="weeklyBtn" mnemonicParsing="false" text="Weekly"
-                                         toggleGroup="$recurGroup"/>
-                            <RadioButton fx:id="monthlyBtn" mnemonicParsing="false" text="Monthly"
-                                         toggleGroup="$recurGroup"/>
+                            <RadioButton fx:id="weeklyBtn" maxHeight="1.7976931348623157E308"
+                                         maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                         text="Weekly" toggleGroup="$recurGroup"/>
+                            <RadioButton fx:id="monthlyBtn" maxHeight="1.7976931348623157E308"
+                                         maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                                         text="Monthly" toggleGroup="$recurGroup"/>
                         </HBox>
                     </VBox>
                 </VBox>
             </VBox>
-            <VBox alignment="CENTER_LEFT" spacing="5.0">
-                <Label text="Priority">
+            <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  spacing="5.0">
+                <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Priority">
                     <font>
                         <Font name="Verdana" size="13.0"/>
                     </font>
                 </Label>
-                <TextFlow>
-                    <RadioButton fx:id="highBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="50.0"
-                                 selected="true" text="High">
+                <TextFlow maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <RadioButton fx:id="highBtn" maxHeight="1.7976931348623157E308"
+                                 maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="17.0"
+                                 prefWidth="50.0" selected="true" text="High">
                         <toggleGroup>
                             <ToggleGroup fx:id="priorityGroup"/>
                         </toggleGroup>
                     </RadioButton>
-                    <RadioButton fx:id="normalBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="65.0"
-                                 text="Normal" toggleGroup="$priorityGroup"/>
-                    <RadioButton fx:id="lowBtn" mnemonicParsing="false" prefHeight="17.0" prefWidth="45.0" text="Low"
-                                 toggleGroup="$priorityGroup"/>
+                    <RadioButton fx:id="normalBtn" maxHeight="1.7976931348623157E308"
+                                 maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="17.0"
+                                 prefWidth="65.0" text="Normal" toggleGroup="$priorityGroup"/>
+                    <RadioButton fx:id="lowBtn" maxHeight="1.7976931348623157E308"
+                                 maxWidth="1.7976931348623157E308" mnemonicParsing="false" prefHeight="17.0"
+                                 prefWidth="45.0" text="Low" toggleGroup="$priorityGroup"/>
                 </TextFlow>
             </VBox>
-            <VBox alignment="CENTER_LEFT" spacing="5.0">
-                <TextFlow>
-                    <Label text="Description">
+            <VBox alignment="CENTER_LEFT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                  spacing="5.0">
+                <TextFlow maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308">
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                           text="Description">
                         <font>
                             <Font name="Verdana" size="13.0"/>
                         </font>
                     </Label>
-                    <Label text="- Optional" textFill="#b2b2b2">
+                    <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                           text="- Optional" textFill="#b2b2b2">
                         <font>
                             <Font name="Verdana" size="13.0"/>
                         </font>
                     </Label>
                 </TextFlow>
-                <TextArea fx:id="eventDescTxtA" prefHeight="120.0" prefWidth="231.0" promptText="Add description...">
+                <TextArea fx:id="eventDescTxtA" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                          prefHeight="120.0" prefWidth="231.0" promptText="Add description...">
                     <font>
                         <Font name="Verdana" size="13.0"/>
                     </font>

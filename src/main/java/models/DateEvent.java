@@ -21,7 +21,6 @@ public class DateEvent {
     private SimpleIntegerProperty eventPriority = new SimpleIntegerProperty(this, "eventPriority");
     private String eventDescription;
     private boolean recurred;
-    private int repeatInterval;
     private boolean repeatMonth;
     private boolean repeatWeek;
     private boolean repeatDay;
@@ -31,7 +30,6 @@ public class DateEvent {
         setEventPriority(1);
         setEventStartDate(LocalDate.now());
         eventDescription = "";
-        repeatInterval = 1;
     }
 
     public static int getPrimaryKeyID() {
@@ -100,14 +98,6 @@ public class DateEvent {
 
     public void setRecurred(boolean recurred) {
         this.recurred = recurred;
-    }
-
-    public int getRepeatInterval() {
-        return repeatInterval;
-    }
-
-    public void setRepeatInterval(int repeatInterval) {
-        this.repeatInterval = repeatInterval;
     }
 
     public boolean isRepeatMonth() {

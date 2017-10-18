@@ -7,10 +7,12 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import models.DateEvent;
-import models.EventList;
+import models.EventManager;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+
+import static java.time.temporal.ChronoUnit.*;
 
 /**
  * ~Created by~
@@ -29,7 +31,7 @@ public class MonthUIController {
     private VBox[][] vBoxes;
 
     private LocalDate baseDate;
-    private EventList eventList;
+    private EventManager eventManager;
 
     @FXML
     public void initialize() {
@@ -57,44 +59,35 @@ public class MonthUIController {
             for (int j = 0; j < gridPane.getColumnConstraints().size(); j++) {
                 vBoxes[i][j].getChildren().clear();
                 LocalDate currentDate = firstDateOfMonth.plusDays(indexDay - firstDayOfWeek);
-                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth, eventList);
+                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth, eventManager);
                 indexDay++;
             }
         }
     }
 
-    private void setGridInfo(VBox vBox, LocalDate date, LocalDate firstDate, EventList list) {
-        Label dateLabel = new Label(String.valueOf(date.getDayOfMonth()));
+    private void setGridInfo(VBox vBox, LocalDate currentDate, LocalDate firstDate, EventManager list) {
+        Label dateLabel = new Label(String.valueOf(currentDate.getDayOfMonth()));
         dateLabel.setFont(Font.font(14));
         vBox.getChildren().add(dateLabel);
-        if (date.getMonth() != firstDate.getMonth()) {
+        if (currentDate.getMonth() != firstDate.getMonth()) {
             dateLabel.setDisable(true);
         } else {
             dateLabel.setDisable(false);
-            if (date.isEqual(LocalDate.now())) {
+            if (currentDate.isEqual(LocalDate.now())) {
                 dateLabel.setUnderline(true);
             } else {
                 dateLabel.setUnderline(false);
             }
             for (DateEvent event : list.getEvents()) {
-                if (!date.isBefore(event.getEventStartDate())) {
+                if (!currentDate.isBefore(event.getEventStartDate())) {
                     if (!event.isRecurred()) {
-                        if (date.isEqual(event.getEventStartDate()))
+                        if (currentDate.isEqual(event.getEventStartDate()))
                             vBox.getChildren().add(new Label(event.getEventName()));
                     } else {
-                        long intervalUnit = -1L;
-                        if (event.isRepeatDay()) {
-                            intervalUnit = ChronoUnit.DAYS.between(event.getEventStartDate(), date);
-                        } else if (event.isRepeatWeek()) {
-                            if (date.getDayOfWeek().equals(event.getEventStartDate().getDayOfWeek())) {
-                                intervalUnit = ChronoUnit.WEEKS.between(event.getEventStartDate(), date);
-                            }
-                        } else if (event.isRepeatMonth()) {
-                            if (date.getDayOfMonth() == event.getEventStartDate().getDayOfMonth()) {
-                                intervalUnit = ChronoUnit.MONTHS.between(event.getEventStartDate(), date);
-                            }
-                        }
-                        if (intervalUnit != -1L && intervalUnit % (event.getRepeatInterval()) == 0) {
+
+                        if ((event.isRepeatMonth() && currentDate.getDayOfMonth() == event.getEventStartDate().getDayOfMonth()) ||
+                                (event.isRepeatWeek() && currentDate.getDayOfWeek().equals(event.getEventStartDate().getDayOfWeek()) ||
+                                        event.isRepeatDay())) {
                             vBox.getChildren().add(new Label(event.getEventName()));
                         }
                     }
@@ -123,8 +116,8 @@ public class MonthUIController {
         updateMonthTable(baseDate);
     }
 
-    public void setEventList(EventList eventList) {
-        this.eventList = eventList;
+    public void setEventManager(EventManager eventManager) {
+        this.eventManager = eventManager;
         updateMonthTable(baseDate);
     }
 
