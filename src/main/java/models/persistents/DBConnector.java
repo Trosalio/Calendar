@@ -1,9 +1,9 @@
 package models.persistents;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import javafx.collections.ObservableList;
+import models.DateEvent;
+
+import java.sql.*;
 
 /**
  * ~Created by~
@@ -16,16 +16,16 @@ public abstract class DBConnector {
 
     protected String JDBC_DRIVER;
     protected String JDBC_URL;
+    protected Connection conn;
 
-    public Connection getDatabaseConnection(){
-        Connection connection = null;
+    public Connection getDatabaseConnection() {
         try {
             Class.forName(JDBC_DRIVER);
-            connection = DriverManager.getConnection(JDBC_URL);
+            conn = DriverManager.getConnection(JDBC_URL);
         } catch (ClassNotFoundException | SQLException e) {
             e.printStackTrace();
         }
-        return connection;
+        return conn;
     }
 
     protected abstract String initJDBC_URL();
@@ -34,10 +34,13 @@ public abstract class DBConnector {
 
     // Does not contain recurring event
     protected abstract void insertItemToDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, boolean isRecurred);
+
     // Contains recurring event
     public abstract void insertItemToDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, boolean isRecurred, boolean isMonthly, boolean isWeekly, boolean isDaily);
+
     // Does not contain recurring event
     protected abstract void modifyItemInDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, int eventID, boolean isRecurred);
+
     // Contains recurring event
     public abstract void modifyItemInDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, int eventID, boolean isRecurred, boolean isMonthly, boolean isWeekly, boolean isDaily);
 
@@ -45,9 +48,8 @@ public abstract class DBConnector {
 
     protected abstract void deleteRecurredItemInDatabase(int ID);
 
-    protected void updateDatabase(String updateSQL){
+    protected void updateDatabase(String updateSQL) {
         PreparedStatement pStmt = null;
-        Connection conn = null;
         try {
             conn = getDatabaseConnection();
             pStmt = conn.prepareStatement(updateSQL);
@@ -67,4 +69,8 @@ public abstract class DBConnector {
             }
         }
     }
+
+    public abstract ResultSet loadItemsFromDatabase(ObservableList<DateEvent> eventList);
+
+    protected abstract void pullDataToEventList(ResultSet rs, ObservableList<DateEvent> eventList) throws SQLException;
 }

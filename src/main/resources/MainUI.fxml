@@ -12,9 +12,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainUIController">
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="650.0" prefWidth="800.0" style="-fx-background-color: #ffffff;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MainUIController">
     <top>
-        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="60.0" style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
             <left>
                 <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" text="Date Event List" textFill="WHITE" BorderPane.alignment="CENTER">
                     <font>
@@ -41,24 +41,29 @@
                         </Button>
                     </right>
                     <left>
-                  <HBox fx:id="stateBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" spacing="10.0">
-                     <children>
-                              <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onDelete" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #ccccff;" text="Delete" textFill="WHITE" BorderPane.alignment="CENTER">
-                                  <font>
-                                      <Font name="Salsa-Regular" size="18.0" />
-                                  </font>
-                                  <BorderPane.margin>
-                                      <Insets />
-                                  </BorderPane.margin>
-                              </Button>
-                        <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" orientation="VERTICAL" />
-                        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#onEdit" prefHeight="50.0" prefWidth="75.0" style="-fx-background-color: #ccccff;" text="Edit" textFill="WHITE">
-                           <font>
-                              <Font name="Salsa-Regular" size="18.0" />
-                           </font>
-                        </Button>
-                     </children>
-                  </HBox>
+                        <HBox fx:id="stateBox" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                              spacing="10.0">
+                            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                    mnemonicParsing="false" onAction="#onDelete" prefHeight="60.0" prefWidth="79.0"
+                                    style="-fx-background-color: #ccccff;" text="Delete" textFill="WHITE"
+                                    BorderPane.alignment="CENTER">
+                                <font>
+                                    <Font name="Salsa-Regular" size="18.0"/>
+                                </font>
+                                <BorderPane.margin>
+                                    <Insets/>
+                                </BorderPane.margin>
+                            </Button>
+                            <Separator maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                       orientation="VERTICAL"/>
+                            <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                                    mnemonicParsing="false" onAction="#onEdit" prefHeight="50.0" prefWidth="75.0"
+                                    style="-fx-background-color: #ccccff;" text="Edit" textFill="WHITE">
+                                <font>
+                                    <Font name="Salsa-Regular" size="18.0"/>
+                                </font>
+                            </Button>
+                        </HBox>
                     </left>
                     <BorderPane.margin>
                         <Insets right="10.0" />

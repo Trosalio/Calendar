@@ -1,5 +1,11 @@
 package models.persistents;
 
+import javafx.collections.ObservableList;
+import models.DateEvent;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+
 /**
  * ~Created by~
  * Name:   Thanapong Supalak (Trosalio)
@@ -11,7 +17,7 @@ package models.persistents;
 //  Did not implement anything(for now) as I considered it as a mocked class in order to fulfill current user requirements
 public class MySQLConnector extends DBConnector {
 
-    public MySQLConnector(){
+    public MySQLConnector() {
         JDBC_DRIVER = "com.mysql.jdbc.Driver";
         JDBC_URL = initJDBC_URL();
     }
@@ -53,6 +59,16 @@ public class MySQLConnector extends DBConnector {
 
     @Override
     protected void deleteRecurredItemInDatabase(int ID) {
+
+    }
+
+    @Override
+    public ResultSet loadItemsFromDatabase(ObservableList<DateEvent> eventList) {
+        return null;
+    }
+
+    @Override
+    protected void pullDataToEventList(ResultSet rs, ObservableList<DateEvent> eventList) throws SQLException {
 
     }
 }

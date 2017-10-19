@@ -4,11 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import models.DateEvent;
+import models.DateEventFormatter;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 import static javafx.scene.control.Alert.*;
 
@@ -36,11 +35,11 @@ public class EventUIController {
     private Boolean saveBool = false;
     private Stage stage;
     private DateEvent dateEvent;
-    private DateTimeFormatter dateTimeFormatter;
+    private DateEventFormatter dateEventFormatter = new DateEventFormatter();
 
     @FXML
     public void initialize() {
-        setDatePickerFormat();
+        dateEventFormatter.formatDatePicker(startDatePicker);
     }
 
     @FXML
@@ -95,33 +94,6 @@ public class EventUIController {
 
     private boolean isValidDate(LocalDate currentDate) {
         return !currentDate.isBefore(LocalDate.now());
-    }
-
-    private void setDatePickerFormat() {
-        startDatePicker.setConverter(new StringConverter<LocalDate>() {
-            @Override
-            public String toString(LocalDate date) {
-                if (date != null) {
-                    return dateTimeFormatter.format(date);
-                } else {
-                    return "";
-                }
-            }
-
-            @Override
-            public LocalDate fromString(String string) {
-                if (string != null && !string.isEmpty()) {
-                    return LocalDate.parse(string, dateTimeFormatter);
-                } else {
-                    return null;
-                }
-            }
-        });
-        startDatePicker.setValue(LocalDate.now());
-    }
-
-    public void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
-        this.dateTimeFormatter = dateTimeFormatter;
     }
 
     private void closeWindow() {

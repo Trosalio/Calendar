@@ -14,7 +14,6 @@ import models.DateEvent;
 import models.EventManager;
 
 import java.io.IOException;
-import java.time.format.DateTimeFormatter;
 
 /**
  * ~Created by~
@@ -32,7 +31,6 @@ public class MainUIController {
     private TabPane tabPane;
     @FXML
     private Tab dateListViewTab, monthlyViewTab;
-    private DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("dd MMMM yyyy");
     private EventManager eventManager;
     private DateListUIController dateListUIController = new DateListUIController();
     private MonthUIController monthUIController = new MonthUIController();
@@ -43,13 +41,17 @@ public class MainUIController {
         if (popEventWindow(event)) {
             eventManager.addEvent(event);
             dateListUIController.changeButtonsState();
+            monthUIController.refreshTable();
         }
     }
 
     @FXML
     public void onDelete() {
-        dateListUIController.deleteEvent();
-        dateListUIController.changeButtonsState();
+        if (dateListUIController.isAnyItemSelected()) {
+            dateListUIController.deleteEvent();
+            dateListUIController.changeButtonsState();
+            monthUIController.refreshTable();
+        }
     }
 
     @FXML
@@ -59,6 +61,7 @@ public class MainUIController {
             if (popEventWindow(event)) {
                 eventManager.editEvent(event);
                 dateListUIController.modifyEventInfo(event);
+                monthUIController.refreshTable();
             }
         }
     }
@@ -77,7 +80,6 @@ public class MainUIController {
             stage.setResizable(false);
 
             eventController.setCurrentEvent(event);
-            eventController.setDateTimeFormatter(dateTimeFormatter);
             eventController.setStage(stage);
 
             stage.showAndWait();
@@ -89,7 +91,7 @@ public class MainUIController {
         }
     }
 
-    public void initUITabs(){
+    public void initUITabs() {
         try {
             createMonthUITab();
             createDateListUITab();
@@ -107,7 +109,6 @@ public class MainUIController {
         dateListUIController = dateListUILoader.getController();
         dateListUIController.attachHBoxState(stateBox);
         dateListUIController.setEventManager(eventManager);
-        dateListUIController.setDateTimeFormatter(dateTimeFormatter);
         dateListViewTab.setContent(dateViewScene);
     }
 
@@ -119,10 +120,11 @@ public class MainUIController {
         monthlyViewTab.setContent(monthlyViewScene);
     }
 
-    private void setUpTabListener(){
+    private void setUpTabListener() {
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            if(newValue.equals(monthlyViewTab)){
+            if (newValue.equals(monthlyViewTab)) {
                 monthUIController.refreshTable();
+                dateListUIController.clearTablesFocus();
             }
         });
     }

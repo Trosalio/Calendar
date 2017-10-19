@@ -4,10 +4,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import models.DateEvent;
+import models.DateEventFormatter;
 import models.EventManager;
 
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
 /**
  * ~Created by~
@@ -20,21 +20,34 @@ public class DateListUIController {
 
 
     @FXML
-    private Label eventNameLbl, eventPriorityLbl, eventDateLbl, recurrenceLbl;
+    private Label eventNameLbl, eventPriorityLbl, eventDateLbl, recurrenceLbl,
+            searchedEventNameLbl, searchedEventPriorityLbl, searchedEventDateLbl, searchedRecurrenceLbl;
     @FXML
-    private TextArea eventDescTxtA;
+    private TextArea eventDescTxtA,
+            searchedEventDescTxtA;
     @FXML
-    private TableView<DateEvent> eventTable;
+    private TableView<DateEvent> eventTable,
+            seachedEventTable;
     @FXML
-    private TableColumn<DateEvent, String> nameColumn;
+    private TableColumn<DateEvent, String> nameColumn,
+            searchedNameColumn;
     @FXML
-    private TableColumn<DateEvent, Number> priorityColumn;
+    private TableColumn<DateEvent, Number> priorityColumn,
+            searchedPriorityColumn;
     @FXML
     private TableColumn<DateEvent, LocalDate> dateColumn;
+    @FXML
+    private Button clearSearchBtn;
+    @FXML
+    private Tab allEventTab,
+            searchedEventTab;
+    @FXML
+    private DatePicker searchedDatePicker;
 
-    private DateTimeFormatter dateTimeFormatter;
+    private DateEventFormatter dateEventFormatter = new DateEventFormatter();
     private EventManager eventManager;
     private HBox hBoxState;
+
 
     public void deleteEvent() {
         int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
@@ -47,7 +60,7 @@ public class DateListUIController {
             DateEvent currentEvent = eventTable.getSelectionModel().getSelectedItem();
             eventNameLbl.setText(currentEvent.getEventName());
             eventPriorityLbl.setText(convertPriorityToText(currentEvent.getEventPriority()));
-            eventDateLbl.setText(dateTimeFormatter.format(currentEvent.getEventStartDate()));
+            eventDateLbl.setText(dateEventFormatter.getFormatter().format(currentEvent.getEventStartDate()));
             eventDescTxtA.setText(currentEvent.getEventDescription());
             recurrenceLbl.setText(convertRecurrenceBooleanToText(currentEvent));
         }
@@ -59,7 +72,7 @@ public class DateListUIController {
         priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
         setPriorityColumnFormat();
         dateColumn.setCellValueFactory(cell -> cell.getValue().eventStartDateProperty());
-        setDateColumnFormat();
+        dateEventFormatter.formatDateColumn(dateColumn);
         setupItemListener();
         changeButtonsState();
     }
@@ -88,19 +101,6 @@ public class DateListUIController {
             reply += currentEvent.isRepeatMonth() ? "Monthly" : currentEvent.isRepeatWeek() ? "Weekly" : "Daily";
         }
         return reply;
-    }
-
-    private void setDateColumnFormat() {
-        dateColumn.setCellFactory(cell -> new TableCell<DateEvent, LocalDate>() {
-            @Override
-            protected void updateItem(LocalDate item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty)
-                    setText(null);
-                else
-                    setText(dateTimeFormatter.format(item));
-            }
-        });
     }
 
     private void setupItemListener() {
@@ -137,12 +137,20 @@ public class DateListUIController {
         this.hBoxState = hBoxState;
     }
 
-    void setEventManager(EventManager eventManager) {
+    public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
         setupTableView();
     }
 
-    void setDateTimeFormatter(DateTimeFormatter dateTimeFormatter) {
-        this.dateTimeFormatter = dateTimeFormatter;
+    public boolean isAnyItemSelected(){
+        return eventTable.getSelectionModel().getSelectedItem() != null;
+    }
+
+    public void clearTablesFocus(){
+        eventTable.getSelectionModel().clearSelection();
+    }
+
+    public void displayEventOfDate(LocalDate currentDate) {
+        System.out.println("Hi");
     }
 }

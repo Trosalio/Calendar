@@ -10,9 +10,6 @@ import models.DateEvent;
 import models.EventManager;
 
 import java.time.LocalDate;
-import java.time.temporal.ChronoUnit;
-
-import static java.time.temporal.ChronoUnit.*;
 
 /**
  * ~Created by~
@@ -79,22 +76,34 @@ public class MonthUIController {
                 dateLabel.setUnderline(false);
             }
             for (DateEvent event : list.getEvents()) {
-                if (!currentDate.isBefore(event.getEventStartDate())) {
-                    if (!event.isRecurred()) {
-                        if (currentDate.isEqual(event.getEventStartDate()))
-                            vBox.getChildren().add(new Label(event.getEventName()));
-                    } else {
-
-                        if ((event.isRepeatMonth() && currentDate.getDayOfMonth() == event.getEventStartDate().getDayOfMonth()) ||
-                                (event.isRepeatWeek() && currentDate.getDayOfWeek().equals(event.getEventStartDate().getDayOfWeek()) ||
-                                        event.isRepeatDay())) {
-                            vBox.getChildren().add(new Label(event.getEventName()));
+                Label eventLabel;
+                if (vBox.getChildren().size() < 3) {
+                    if (!currentDate.isBefore(event.getEventStartDate())) {
+                        if ((!event.isRecurred() && currentDate.isEqual(event.getEventStartDate())) ||
+                                (event.isRecurred() &&
+                                        ((event.isRepeatMonth() && currentDate.getDayOfMonth() == event.getEventStartDate().getDayOfMonth()) ||
+                                                (event.isRepeatWeek() && currentDate.getDayOfWeek().equals(event.getEventStartDate().getDayOfWeek()) ||
+                                                        event.isRepeatDay())))) {
+                            eventLabel = new Label(event.getEventName());
+                            vBox.getChildren().add(eventLabel);
                         }
                     }
+                } else if (vBox.getChildren().size() == 3) {
+                    vBox.getChildren().remove(2);
+                    eventLabel = new Label("more...");
+                    vBox.getChildren().add(eventLabel);
                 }
             }
         }
+        vBox.setOnMouseClicked(mouseEvent -> {
+            displayEventListOf(currentDate);
+            mouseEvent.consume();
+        });
+    }
 
+    private void displayEventListOf(LocalDate currentDate) {
+        new DateListUIController().displayEventOfDate(currentDate);
+        refreshTable();
     }
 
     @FXML
@@ -120,6 +129,5 @@ public class MonthUIController {
         this.eventManager = eventManager;
         updateMonthTable(baseDate);
     }
-
 }
 
