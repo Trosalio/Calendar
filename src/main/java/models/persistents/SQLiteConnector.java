@@ -228,7 +228,6 @@ public class SQLiteConnector extends DBConnector {
             int pkID = resultSet.next() ? resultSet.getInt(1) : 1;
             DateEvent.setPrimaryKeyID(pkID);
             resultSet.close();
-            System.out.println("Lastest ID Key = " + pkID);
         } catch (SQLException e) {
             e.printStackTrace();
         } finally {
@@ -246,7 +245,7 @@ public class SQLiteConnector extends DBConnector {
         return null;
     }
 
-    protected void pullDataToEventList(ResultSet rs, ObservableList<DateEvent> eventList) throws SQLException{
+    protected void pullDataToEventList(ResultSet rs, ObservableList<DateEvent> eventList) throws SQLException {
         while (rs.next()) {
             DateEvent event = new DateEvent();
             int ID = rs.getInt("ID");
@@ -267,7 +266,6 @@ public class SQLiteConnector extends DBConnector {
                 event.setRepeatDay(rs.getInt("repeatDay") == 1);
             }
             DateEvent.setPrimaryKeyID(rs.getInt("ID"));
-            System.out.println("Pk ID in loop = " + DateEvent.getPrimaryKeyID());
             eventList.add(event);
         }
     }

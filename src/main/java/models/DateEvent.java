@@ -1,6 +1,9 @@
 package models;
 
-import javafx.beans.property.*;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
 
 import java.time.LocalDate;
 
@@ -25,7 +28,7 @@ public class DateEvent {
     private boolean repeatWeek;
     private boolean repeatDay;
 
-    public DateEvent(){
+    public DateEvent() {
         setEventName("");
         setEventPriority(1);
         setEventStartDate(LocalDate.now());
@@ -52,36 +55,36 @@ public class DateEvent {
         return eventName.get();
     }
 
-    public SimpleStringProperty eventNameProperty() {
-        return eventName;
-    }
-
     public void setEventName(String eventName) {
         this.eventName.set(eventName);
+    }
+
+    public SimpleStringProperty eventNameProperty() {
+        return eventName;
     }
 
     public LocalDate getEventStartDate() {
         return eventStartDate.get();
     }
 
-    public ObjectProperty<LocalDate> eventStartDateProperty() {
-        return eventStartDate;
-    }
-
     public void setEventStartDate(LocalDate eventStartDate) {
         this.eventStartDate.set(eventStartDate);
+    }
+
+    public ObjectProperty<LocalDate> eventStartDateProperty() {
+        return eventStartDate;
     }
 
     public int getEventPriority() {
         return eventPriority.get();
     }
 
-    public SimpleIntegerProperty eventPriorityProperty() {
-        return eventPriority;
-    }
-
     public void setEventPriority(int eventPriority) {
         this.eventPriority.set(eventPriority);
+    }
+
+    public SimpleIntegerProperty eventPriorityProperty() {
+        return eventPriority;
     }
 
     public String getEventDescription() {
@@ -129,6 +132,20 @@ public class DateEvent {
         repeatDay = false;
         repeatWeek = false;
         repeatMonth = false;
+    }
+
+    public boolean isEventOccurredAtDate(LocalDate askedDate) {
+        if (isRecurred()) {
+            if (isRepeatMonth()) {
+                return askedDate.getDayOfMonth() == eventStartDate.get().getDayOfMonth();
+            } else if (isRepeatWeek()) {
+                return askedDate.getDayOfWeek().equals(eventStartDate.get().getDayOfWeek());
+            } else {
+                return isRepeatDay();
+            }
+        } else { // one time event
+            return askedDate.isEqual(eventStartDate.get());
+        }
     }
 }
 

@@ -5,15 +5,16 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.*;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-
 import models.DateEvent;
 import models.EventManager;
 
 import java.io.IOException;
+import java.time.LocalDate;
 
 /**
  * ~Created by~
@@ -32,8 +33,8 @@ public class MainUIController {
     @FXML
     private Tab dateListViewTab, monthlyViewTab;
     private EventManager eventManager;
-    private DateListUIController dateListUIController = new DateListUIController();
-    private MonthUIController monthUIController = new MonthUIController();
+    private DateListUIController dateListUIController;
+    private MonthUIController monthUIController;
 
     @FXML
     private void onAdd() {
@@ -93,8 +94,9 @@ public class MainUIController {
 
     public void initUITabs() {
         try {
-            createMonthUITab();
             createDateListUITab();
+            createMonthUITab();
+            bindControllers();
             tabPane.getSelectionModel().select(monthlyViewTab);
             setUpTabListener();
         } catch (IOException e) {
@@ -103,12 +105,19 @@ public class MainUIController {
         }
     }
 
+    private void bindControllers() {
+//        Might come handy in the future
+//        dateListUIController.bindMainUIController(this);
+        monthUIController.bindMainUIController(this);
+    }
+
     private void createDateListUITab() throws IOException {
         FXMLLoader dateListUILoader = new FXMLLoader(getClass().getResource("/DateListUI.fxml"));
         Parent dateViewScene = dateListUILoader.load();
         dateListUIController = dateListUILoader.getController();
         dateListUIController.attachHBoxState(stateBox);
         dateListUIController.setEventManager(eventManager);
+        dateListUIController.initDateListUI();
         dateListViewTab.setContent(dateViewScene);
     }
 
@@ -132,5 +141,10 @@ public class MainUIController {
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
 
+    }
+
+    public void displayEventsOfDate(LocalDate date) {
+        dateListUIController.displayEventsOfDate(date);
+        tabPane.getSelectionModel().select(dateListViewTab);
     }
 }

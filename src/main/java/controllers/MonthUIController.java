@@ -29,6 +29,7 @@ public class MonthUIController {
 
     private LocalDate baseDate;
     private EventManager eventManager;
+    private MainUIController mainUIController;
 
     @FXML
     public void initialize() {
@@ -79,16 +80,12 @@ public class MonthUIController {
                 Label eventLabel;
                 if (vBox.getChildren().size() < 3) {
                     if (!currentDate.isBefore(event.getEventStartDate())) {
-                        if ((!event.isRecurred() && currentDate.isEqual(event.getEventStartDate())) ||
-                                (event.isRecurred() &&
-                                        ((event.isRepeatMonth() && currentDate.getDayOfMonth() == event.getEventStartDate().getDayOfMonth()) ||
-                                                (event.isRepeatWeek() && currentDate.getDayOfWeek().equals(event.getEventStartDate().getDayOfWeek()) ||
-                                                        event.isRepeatDay())))) {
+                        if (event.isEventOccurredAtDate(currentDate)) {
                             eventLabel = new Label(event.getEventName());
                             vBox.getChildren().add(eventLabel);
                         }
                     }
-                } else if (vBox.getChildren().size() == 3) {
+                } else if (vBox.getChildren().size() >= 3) {
                     vBox.getChildren().remove(2);
                     eventLabel = new Label("more...");
                     vBox.getChildren().add(eventLabel);
@@ -96,13 +93,13 @@ public class MonthUIController {
             }
         }
         vBox.setOnMouseClicked(mouseEvent -> {
-            displayEventListOf(currentDate);
+            displayEventsOfDate(currentDate);
             mouseEvent.consume();
         });
     }
 
-    private void displayEventListOf(LocalDate currentDate) {
-        new DateListUIController().displayEventOfDate(currentDate);
+    private void displayEventsOfDate(LocalDate currentDate) {
+        mainUIController.displayEventsOfDate(currentDate);
         refreshTable();
     }
 
@@ -128,6 +125,10 @@ public class MonthUIController {
     public void setEventManager(EventManager eventManager) {
         this.eventManager = eventManager;
         updateMonthTable(baseDate);
+    }
+
+    public void bindMainUIController(MainUIController mainUIController) {
+        this.mainUIController = mainUIController;
     }
 }
 

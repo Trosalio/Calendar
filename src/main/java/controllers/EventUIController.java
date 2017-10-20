@@ -9,7 +9,7 @@ import models.DateEventFormatter;
 
 import java.time.LocalDate;
 
-import static javafx.scene.control.Alert.*;
+import static javafx.scene.control.Alert.AlertType;
 
 /**
  * ~Created by~

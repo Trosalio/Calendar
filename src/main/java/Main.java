@@ -5,9 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import models.EventManager;
 import models.persistents.DBConnector;
 import models.persistents.DBManager;
-import models.EventManager;
 import models.persistents.SQLiteConnector;
 
 import java.io.IOException;
@@ -42,7 +42,7 @@ public class Main extends Application {
         stage.setScene(new Scene(root));
         stage.setTitle("Calendar");
         stage.setResizable(true);
-        
+
         // perform cleanup before closing the program
         stage.setOnHidden(e -> Platform.exit());
         stage.show();

@@ -24,7 +24,7 @@ public class MySQLConnector extends DBConnector {
 
     @Override
     protected String initJDBC_URL() {
-        return "jdbc:mysql://localhost:3306/MemoView?user=root";
+        return "jdbc:mysql://localhost:3306/?user=root";
     }
 
     @Override
