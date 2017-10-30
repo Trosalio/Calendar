@@ -6,9 +6,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import models.EventManager;
-import models.persistents.DBConnector;
-import models.persistents.DBManager;
-import models.persistents.SQLiteConnector;
+import models.persistences.DBConnector;
+import models.persistences.DBManager;
+import models.persistences.SQLiteConnector;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.io.IOException;
 
@@ -27,12 +29,14 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
+        ApplicationContext bf = new ClassPathXmlApplicationContext("/configs/main-context.xml");
+
         EventManager eventManager = new EventManager();
-        DBConnector DBConnector = new SQLiteConnector();
+        DBConnector DBConnector = bf.getBean("sQLiteConnector", SQLiteConnector.class);
         DBManager dbManager = new DBManager(eventManager);
         dbManager.setDatabaseConnector(DBConnector);
 
-        FXMLLoader mainUILoader = new FXMLLoader(getClass().getResource("/MainUI.fxml"));
+        FXMLLoader mainUILoader = new FXMLLoader(getClass().getResource("/fxml/MainUI.fxml"));
         Parent root = mainUILoader.load();
         MainUIController mainUIController = mainUILoader.getController();
         mainUIController.setEventManager(eventManager);

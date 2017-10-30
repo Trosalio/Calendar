@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+
+<!--
+    Name:   Thanapong Supalak
+    ID:     5810405029
+    Project Name: Calendar
+-->
+
+<BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="590.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.MonthUIController">
+    <top>
+        <BorderPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" style="-fx-background-color: #ccccff;" BorderPane.alignment="CENTER">
+            <right>
+                <HBox alignment="CENTER_RIGHT" spacing="10.0" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets/>
+                    </BorderPane.margin>
+                    <Button mnemonicParsing="false" onAction="#onRefreshBtn" prefHeight="50.0" prefWidth="90.0"
+                            style="-fx-background-color: #ccccff;" text="Refresh" textFill="WHITE">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Button>
+                    <Button mnemonicParsing="false" onAction="#onPrevMonthBtn" prefHeight="50.0" prefWidth="50.0"
+                            style="-fx-background-color: #ccccff;" text="◄" textFill="WHITE">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Button>
+                    <Line endY="40.0" stroke="WHITE">
+                        <HBox.margin>
+                            <Insets/>
+                        </HBox.margin>
+                    </Line>
+                    <Button mnemonicParsing="false" onAction="#onNextMonthBtn" prefHeight="50.0" prefWidth="50.0"
+                            style="-fx-background-color: #ccccff;" text="►" textFill="WHITE">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Button>
+                </HBox>
+            </right>
+            <BorderPane.margin>
+                <Insets />
+            </BorderPane.margin>
+            <left>
+                <HBox alignment="CENTER" spacing="20.0" BorderPane.alignment="CENTER">
+                    <BorderPane.margin>
+                        <Insets bottom="10.0" left="10.0" top="10.0"/>
+                    </BorderPane.margin>
+                    <Label fx:id="monthLbl" text="&lt;Month&gt;" textFill="WHITE">
+                        <font>
+                            <Font name="Salsa-Regular" size="36.0"/>
+                        </font>
+                    </Label>
+                    <Label fx:id="yearLbl" text="&lt;Year&gt;" textFill="WHITE">
+                        <font>
+                            <Font name="Salsa-Regular" size="36.0"/>
+                        </font>
+                    </Label>
+                </HBox>
+            </left>
+            <bottom>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" maxWidth="1.7976931348623157E308"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints maxHeight="1.7976931348623157E308" vgrow="SOMETIMES"/>
+                    </rowConstraints>
+                    <Label alignment="CENTER" text="Sun" textFill="WHITE">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label alignment="CENTER" text="Mon" textFill="WHITE" GridPane.columnIndex="1">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label alignment="CENTER" text="Tue" textFill="WHITE" GridPane.columnIndex="2">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label alignment="CENTER" text="Wed" textFill="WHITE" GridPane.columnIndex="3">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label alignment="CENTER" text="Thu" textFill="WHITE" GridPane.columnIndex="4">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label alignment="CENTER" text="Fri" textFill="WHITE" GridPane.columnIndex="5">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                    <Label alignment="CENTER" text="Sat" textFill="WHITE" GridPane.columnIndex="6">
+                        <font>
+                            <Font name="Salsa-Regular" size="18.0"/>
+                        </font>
+                    </Label>
+                </GridPane>
+            </bottom>
+        </BorderPane>
+    </top>
+   <center>
+          <GridPane fx:id="gridPane" gridLinesVisible="true" BorderPane.alignment="CENTER">
+              <columnConstraints>
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+                  <ColumnConstraints hgrow="SOMETIMES" maxWidth="1.7976931348623157E308" prefWidth="114.0" />
+              </columnConstraints>
+              <rowConstraints>
+                  <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="83.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="83.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="83.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="83.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="83.0" vgrow="SOMETIMES" />
+                  <RowConstraints maxHeight="1.7976931348623157E308" prefHeight="83.0" vgrow="SOMETIMES" />
+              </rowConstraints>
+          </GridPane>
+   </center>
+</BorderPane>

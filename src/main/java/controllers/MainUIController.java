@@ -69,7 +69,7 @@ public class MainUIController {
 
     private boolean popEventWindow(DateEvent event) {
         try {
-            FXMLLoader eventUILoader = new FXMLLoader(getClass().getResource("/EventUI.fxml"));
+            FXMLLoader eventUILoader = new FXMLLoader(getClass().getResource("/fxml/EventUI.fxml"));
             Parent root = eventUILoader.load();
             EventUIController eventController = eventUILoader.getController();
 
@@ -112,7 +112,7 @@ public class MainUIController {
     }
 
     private void createDateListUITab() throws IOException {
-        FXMLLoader dateListUILoader = new FXMLLoader(getClass().getResource("/DateListUI.fxml"));
+        FXMLLoader dateListUILoader = new FXMLLoader(getClass().getResource("/fxml/DateListUI.fxml"));
         Parent dateViewScene = dateListUILoader.load();
         dateListUIController = dateListUILoader.getController();
         dateListUIController.attachHBoxState(stateBox);
@@ -122,7 +122,7 @@ public class MainUIController {
     }
 
     private void createMonthUITab() throws IOException {
-        FXMLLoader monthUILoader = new FXMLLoader(getClass().getResource("/MonthUI.fxml"));
+        FXMLLoader monthUILoader = new FXMLLoader(getClass().getResource("/fxml/MonthUI.fxml"));
         Parent monthlyViewScene = monthUILoader.load();
         monthUIController = monthUILoader.getController();
         monthUIController.setEventManager(eventManager);
