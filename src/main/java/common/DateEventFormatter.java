@@ -1,4 +1,4 @@
-package models;
+package common;
 
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TableCell;
@@ -13,17 +13,15 @@ import java.time.format.DateTimeFormatter;
  * ID:     5810405029
  * Project Name: Calendar
  * Credit to: criticalx7
- */
-
-/**
+ *
  * This helper class handles format date components
  * into a desirable format.
  */
 
 public class DateEventFormatter {
 
-    // datePattern - Default pattern of this class is dd MMM yyyy
-    private String datePattern = "dd MMM yyyy";
+    // datePattern - Default pattern of this class is dd MMMM yyyy
+    private String datePattern = "dd MMMM yyyy";
 
     /**
      * Fluent method for change date pattern.
@@ -51,7 +49,7 @@ public class DateEventFormatter {
     public void formatDatePicker(DatePicker... datePickers) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern(datePattern);
         for (DatePicker datePicker : datePickers) {
-            datePicker.setConverter(new StringConverter<LocalDate>() {
+            datePicker.setConverter(new StringConverter<>() {
                 @Override
                 public String toString(LocalDate date) {
                     return (date != null ? formatter.format(date) : "");
@@ -85,7 +83,7 @@ public class DateEventFormatter {
     @SafeVarargs
     public final <T> void formatDateColumn(TableColumn<T, LocalDate>... columns) {
         for (TableColumn<T, LocalDate> column : columns)
-            column.setCellFactory(cell -> new TableCell<T, LocalDate>() {
+            column.setCellFactory(cell -> new TableCell<>() {
                 @Override
                 protected void updateItem(LocalDate item, boolean empty) {
                     super.updateItem(item, empty);

@@ -1,13 +1,13 @@
-package controllers;
+package client.controllers;
 
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import models.DateEvent;
-import models.DateEventFormatter;
-import models.EventManager;
+import common.DateEvent;
+import common.DateEventFormatter;
+import common.CalendarService;
 
 import java.time.LocalDate;
 
@@ -47,7 +47,7 @@ public class DateListUIController {
     private DatePicker searchedDatePicker;
 
     private DateEventFormatter dateEventFormatter = new DateEventFormatter();
-    private EventManager eventManager;
+    private CalendarService calendarService;
     private HBox hBoxState;
     private FilteredList<DateEvent> filteredDateEvent;
     private SortedList<DateEvent> searchedList;
@@ -67,11 +67,11 @@ public class DateListUIController {
 
     public void deleteEvent() {
         int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
-        eventManager.deleteEvent(removeIndex);
+        calendarService.deleteEvent(removeIndex);
         changeButtonsState();
     }
 
-    void modifyEventInfo(DateEvent event) {
+    public void modifyEventInfo(DateEvent event) {
         if (event != null) {
             DateEvent currentEvent = eventTable.getSelectionModel().getSelectedItem();
             eventNameLbl.setText(currentEvent.getEventName());
@@ -89,7 +89,7 @@ public class DateListUIController {
     }
 
     private void setupTableView() {
-        eventTable.setItems(eventManager.getEvents());
+        eventTable.setItems(calendarService.getEvents());
         nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
         priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
         setPriorityColumnFormatOf(priorityColumn);
@@ -99,7 +99,7 @@ public class DateListUIController {
     }
 
     private void setupSearchedTableView() {
-        filteredDateEvent = new FilteredList<>(eventManager.getEvents(), dateEvent -> true);
+        filteredDateEvent = new FilteredList<>(calendarService.getEvents(), dateEvent -> true);
         searchedList = new SortedList<>(filteredDateEvent);
         searchedEventTable.setItems(searchedList);
         searchedNameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
@@ -109,7 +109,7 @@ public class DateListUIController {
     }
 
     private void setPriorityColumnFormatOf(TableColumn<DateEvent, Number> column) {
-        column.setCellFactory(cell -> new TableCell<DateEvent, Number>() {
+        column.setCellFactory(cell -> new TableCell<>() {
             @Override
             protected void updateItem(Number item, boolean empty) {
                 super.updateItem(item, empty);
@@ -136,11 +136,11 @@ public class DateListUIController {
 
     private void setupItemListenerOf(TableView<DateEvent> tableView) {
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            eventManager.setCurrentEvent(newSelection);
+            calendarService.setCurrentEvent(newSelection);
             modifyEventInfo(newSelection);
         });
 
-        eventManager.currentEventProperty().addListener((obs, oldSelection, newSelection) -> {
+        calendarService.currentEventProperty().addListener((obs, oldSelection, newSelection) -> {
             if (newSelection == null) {
                 tableView.getSelectionModel().clearSelection();
             } else {
@@ -168,7 +168,7 @@ public class DateListUIController {
     }
 
     void changeButtonsState() {
-        if (eventManager.getEvents().isEmpty()) {
+        if (calendarService.getEvents().isEmpty()) {
             hBoxState.setDisable(true);
             hBoxState.setVisible(false);
             eventNameLbl.setText("<Name>");
@@ -193,8 +193,8 @@ public class DateListUIController {
         this.hBoxState = hBoxState;
     }
 
-    public void setEventManager(EventManager eventManager) {
-        this.eventManager = eventManager;
+    public void setCalendarService(CalendarService calendarService) {
+        this.calendarService = calendarService;
     }
 
     public void initDateListUI() {

@@ -1,10 +1,11 @@
-package models;
+package common;
 
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 /**
@@ -14,7 +15,7 @@ import java.time.LocalDate;
  * Project Name: Calendar
  */
 
-public class DateEvent {
+public class DateEvent implements Serializable {
 
     private static int primaryKeyID;
 

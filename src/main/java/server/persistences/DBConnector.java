@@ -1,7 +1,8 @@
-package models.persistences;
+package server.persistences;
 
 import javafx.collections.ObservableList;
-import models.DateEvent;
+import common.DateEvent;
+import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
 
@@ -14,23 +15,21 @@ import java.sql.*;
 
 public abstract class DBConnector {
 
-    private String JDBC_URL;
+    private String DRIVER_URL = setUpDriver();
     protected Connection conn;
 
-    public DBConnector(String JDBC_URL){
-        this.JDBC_URL = JDBC_URL;
-    }
-
     public Connection getDatabaseConnection() {
+        SQLiteConfig config = new SQLiteConfig();
+        config.enforceForeignKeys(true);
         try {
-            conn = DriverManager.getConnection(JDBC_URL);
+            conn = DriverManager.getConnection(DRIVER_URL, config.toProperties());
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return conn;
     }
 
-    public abstract String setUpJDBC_URL();
+    public abstract String setUpDriver();
 
     protected abstract void createTableIfNotExist();
 
@@ -68,7 +67,7 @@ public abstract class DBConnector {
 
     protected abstract void pullDataToEventList(ResultSet rs, ObservableList<DateEvent> eventList) throws SQLException;
 
-    public void setJDBC_URL(String JDBC_URL) {
-        this.JDBC_URL = JDBC_URL;
+    public void setDRIVER_URL(String DRIVER_URL) {
+        this.DRIVER_URL = DRIVER_URL;
     }
 }

@@ -1,9 +1,8 @@
-package models.persistences;
+package server.persistences;
 
-import javafx.collections.ObservableList;
-import models.DateEvent;
-import models.DateEventFormatter;
-import models.EventManager;
+import common.DateEvent;
+import common.DateEventFormatter;
+import server.CalendarServiceImp;
 
 import java.time.format.DateTimeFormatter;
 
@@ -17,15 +16,13 @@ import java.time.format.DateTimeFormatter;
 public class DBManager {
 
     private DateTimeFormatter dateTimeFormatter;
-    private EventManager eventManager;
+    private CalendarServiceImp serviceImp;
     private DBConnector databaseConnector;
-    private ObservableList<DateEvent> eventList;
 
-    public DBManager(EventManager eventManager) {
-        this.eventManager = eventManager;
-        this.eventManager.setDbManager(this);
+    public DBManager(CalendarServiceImp serviceImp) {
+        this.serviceImp = serviceImp;
+        this.serviceImp.setDataSource(this);
         this.dateTimeFormatter = new DateEventFormatter().getFormatter();
-        this.eventList = eventManager.getEvents();
     }
 
     public void insertEventRecord(DateEvent event) {
@@ -60,7 +57,7 @@ public class DBManager {
     }
 
     public void loadDatabase() {
-        databaseConnector.loadItemsFromDatabase(eventList);
+        databaseConnector.loadItemsFromDatabase(serviceImp.getEvents());
     }
 
 

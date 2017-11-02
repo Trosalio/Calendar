@@ -1,10 +1,12 @@
-package models;
+package server;
 
+import common.CalendarService;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import models.persistences.DBManager;
+import common.DateEvent;
+import server.persistences.DBManager;
 
 /**
  * ~Created by~
@@ -13,28 +15,28 @@ import models.persistences.DBManager;
  * Project Name: Calendar
  */
 
-public class EventManager {
+public class CalendarServiceImp implements CalendarService {
 
     private final ObservableList<DateEvent> events = FXCollections.observableArrayList();
     private final ObjectProperty<DateEvent> currentEvent = new SimpleObjectProperty<>(null);
 
-    private DBManager dbManager;
+    private DBManager dataSource;
 
     public void addEvent(DateEvent event) {
         DateEvent.setPrimaryKeyID(DateEvent.getPrimaryKeyID() + 1);
         event.setID(DateEvent.getPrimaryKeyID());
         events.add(event);
-        if (dbManager != null) dbManager.insertEventRecord(event);
+        if (dataSource != null) dataSource.insertEventRecord(event);
     }
 
     public void deleteEvent(int removeIndex) {
         DateEvent removedEvent = events.get(removeIndex);
         events.remove(removeIndex);
-        if (dbManager != null) dbManager.deleteEventRecord(removedEvent.getID(), removedEvent.isRecurred());
+        if (dataSource != null) dataSource.deleteEventRecord(removedEvent.getID(), removedEvent.isRecurred());
     }
 
     public void editEvent(DateEvent event) {
-        if (dbManager != null) dbManager.modifyEventRecord(event);
+        if (dataSource != null) dataSource.modifyEventRecord(event);
     }
 
     public DateEvent getCurrentEvent() {
@@ -49,11 +51,11 @@ public class EventManager {
         return currentEvent;
     }
 
-    public void setDbManager(DBManager dbManager) {
-        this.dbManager = dbManager;
-    }
-
     public ObservableList<DateEvent> getEvents() {
         return events;
+    }
+
+    public void setDataSource(DBManager dataSource) {
+        this.dataSource = dataSource;
     }
 }

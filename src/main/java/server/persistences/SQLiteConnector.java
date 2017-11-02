@@ -1,8 +1,8 @@
-package models.persistences;
+package server.persistences;
 
 import javafx.collections.ObservableList;
-import models.DateEvent;
-import models.DateEventFormatter;
+import common.DateEvent;
+import common.DateEventFormatter;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,12 +22,8 @@ public class SQLiteConnector extends DBConnector {
 
     private int fkID;
 
-    public SQLiteConnector(String JDBC_URL) {
-        super(JDBC_URL);
-    }
-
     @Override
-    public String setUpJDBC_URL() {
+    public String setUpDriver() {
         String jdbc_url = "jdbc:sqlite:";
         String homePath = System.getProperty("user.home");
         File dbFolder = new File(homePath + File.separator + "5029db");

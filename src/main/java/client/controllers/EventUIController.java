@@ -1,11 +1,11 @@
-package controllers;
+package client.controllers;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
-import models.DateEvent;
-import models.DateEventFormatter;
+import common.DateEvent;
+import common.DateEventFormatter;
 
 import java.time.LocalDate;
 

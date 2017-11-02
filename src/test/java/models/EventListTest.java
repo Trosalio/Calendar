@@ -1,6 +1,9 @@
 package models;
 
+import common.DateEvent;
 import org.junit.jupiter.api.*;
+import server.CalendarServiceImp;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
@@ -12,12 +15,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class EventListTest {
 
-    private EventManager mockedEventManager;
+    private CalendarServiceImp mockedEventManager;
     private DateEvent mockedEvent;
 
     @BeforeEach
     void init(){
-        mockedEventManager = new EventManager();
+        mockedEventManager = new CalendarServiceImp();
         mockedEvent = new DateEvent();
         mockedEventManager.addEvent(mockedEvent);
     }

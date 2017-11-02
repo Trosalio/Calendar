@@ -1,4 +1,4 @@
-package controllers;
+package client.controllers;
 
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
@@ -6,8 +6,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import models.DateEvent;
-import models.EventManager;
+import common.DateEvent;
+import common.CalendarService;
 
 import java.time.LocalDate;
 
@@ -28,7 +28,7 @@ public class MonthUIController {
     private VBox[][] vBoxes;
 
     private LocalDate baseDate;
-    private EventManager eventManager;
+    private CalendarService calendarService;
     private MainUIController mainUIController;
 
     @FXML
@@ -57,13 +57,13 @@ public class MonthUIController {
             for (int j = 0; j < gridPane.getColumnConstraints().size(); j++) {
                 vBoxes[i][j].getChildren().clear();
                 LocalDate currentDate = firstDateOfMonth.plusDays(indexDay - firstDayOfWeek);
-                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth, eventManager);
+                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth, calendarService);
                 indexDay++;
             }
         }
     }
 
-    private void setGridInfo(VBox vBox, LocalDate currentDate, LocalDate firstDate, EventManager list) {
+    private void setGridInfo(VBox vBox, LocalDate currentDate, LocalDate firstDate, CalendarService list) {
         Label dateLabel = new Label(String.valueOf(currentDate.getDayOfMonth()));
         dateLabel.setFont(Font.font(14));
         vBox.getChildren().add(dateLabel);
@@ -122,8 +122,8 @@ public class MonthUIController {
         updateMonthTable(baseDate);
     }
 
-    public void setEventManager(EventManager eventManager) {
-        this.eventManager = eventManager;
+    public void setCalendarService(CalendarService calendarService) {
+        this.calendarService = calendarService;
         updateMonthTable(baseDate);
     }
 

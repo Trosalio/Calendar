@@ -1,4 +1,4 @@
-package controllers;
+package client.controllers;
 
 
 import javafx.fxml.FXML;
@@ -10,8 +10,8 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import models.DateEvent;
-import models.EventManager;
+import common.DateEvent;
+import common.CalendarService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public class MainUIController {
     private TabPane tabPane;
     @FXML
     private Tab dateListViewTab, monthlyViewTab;
-    private EventManager eventManager;
+    private CalendarService calendarService;
     private DateListUIController dateListUIController;
     private MonthUIController monthUIController;
 
@@ -40,7 +40,7 @@ public class MainUIController {
     private void onAdd() {
         DateEvent event = new DateEvent();
         if (popEventWindow(event)) {
-            eventManager.addEvent(event);
+            calendarService.addEvent(event);
             dateListUIController.changeButtonsState();
             monthUIController.refreshTable();
         }
@@ -57,10 +57,10 @@ public class MainUIController {
 
     @FXML
     private void onEdit() {
-        DateEvent event = eventManager.getCurrentEvent();
+        DateEvent event = calendarService.getCurrentEvent();
         if (event != null) {
             if (popEventWindow(event)) {
-                eventManager.editEvent(event);
+                calendarService.editEvent(event);
                 dateListUIController.modifyEventInfo(event);
                 monthUIController.refreshTable();
             }
@@ -116,7 +116,7 @@ public class MainUIController {
         Parent dateViewScene = dateListUILoader.load();
         dateListUIController = dateListUILoader.getController();
         dateListUIController.attachHBoxState(stateBox);
-        dateListUIController.setEventManager(eventManager);
+        dateListUIController.setCalendarService(calendarService);
         dateListUIController.initDateListUI();
         dateListViewTab.setContent(dateViewScene);
     }
@@ -125,7 +125,7 @@ public class MainUIController {
         FXMLLoader monthUILoader = new FXMLLoader(getClass().getResource("/fxml/MonthUI.fxml"));
         Parent monthlyViewScene = monthUILoader.load();
         monthUIController = monthUILoader.getController();
-        monthUIController.setEventManager(eventManager);
+        monthUIController.setCalendarService(calendarService);
         monthlyViewTab.setContent(monthlyViewScene);
     }
 
@@ -138,8 +138,8 @@ public class MainUIController {
         });
     }
 
-    public void setEventManager(EventManager eventManager) {
-        this.eventManager = eventManager;
+    public void setCalendarService(CalendarService calendarService) {
+        this.calendarService = calendarService;
 
     }
 

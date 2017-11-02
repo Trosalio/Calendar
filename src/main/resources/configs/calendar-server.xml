@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Name:   Thanapong Supalak
+    ID:     5810405029
+    Project Name: Calendar
+-->
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="calendarServiceImp" class="server.CalendarServiceImp">
+        <property name="dataSource" ref="dbManager"/>
+    </bean>
+
+    <bean id="dbManager" class="server.persistences.DBManager">
+        <constructor-arg ref="calendarServiceImp"/>
+    </bean>
+
+    <bean id="sQLiteConnector" class="server.persistences.SQLiteConnector"/>
+
+    <bean class="org.springframework.remoting.rmi.RmiServiceExporter">
+        <property name="service" ref="calendarServiceImp"/>
+        <property name="serviceName" value="CalendarSrv"/>
+        <property name="serviceInterface" value="common.CalendarService"/>
+        <property name="registryPort" value="1337"/>
+    </bean>
+
+</beans>
