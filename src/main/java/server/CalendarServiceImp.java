@@ -1,12 +1,10 @@
 package server;
 
 import common.CalendarService;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import common.DateEvent;
 import server.persistences.DBManager;
+
+import java.util.ArrayList;
 
 /**
  * ~Created by~
@@ -17,21 +15,15 @@ import server.persistences.DBManager;
 
 public class CalendarServiceImp implements CalendarService {
 
-    private final ObservableList<DateEvent> events = FXCollections.observableArrayList();
-    private final ObjectProperty<DateEvent> currentEvent = new SimpleObjectProperty<>(null);
+    private final ArrayList<DateEvent> events = new ArrayList<>();
 
     private DBManager dataSource;
 
-    public void addEvent(DateEvent event) {
-        DateEvent.setPrimaryKeyID(DateEvent.getPrimaryKeyID() + 1);
-        event.setID(DateEvent.getPrimaryKeyID());
-        events.add(event);
-        if (dataSource != null) dataSource.insertEventRecord(event);
+    public void addEvent(DateEvent addedEvent) {
+        if (dataSource != null) dataSource.insertEventRecord(addedEvent);
     }
 
-    public void deleteEvent(int removeIndex) {
-        DateEvent removedEvent = events.get(removeIndex);
-        events.remove(removeIndex);
+    public void deleteEvent(DateEvent removedEvent) {
         if (dataSource != null) dataSource.deleteEventRecord(removedEvent.getID(), removedEvent.isRecurred());
     }
 
@@ -39,19 +31,7 @@ public class CalendarServiceImp implements CalendarService {
         if (dataSource != null) dataSource.modifyEventRecord(event);
     }
 
-    public DateEvent getCurrentEvent() {
-        return currentEvent.get();
-    }
-
-    public void setCurrentEvent(DateEvent currentEvent) {
-        this.currentEvent.set(currentEvent);
-    }
-
-    public ObjectProperty<DateEvent> currentEventProperty() {
-        return currentEvent;
-    }
-
-    public ObservableList<DateEvent> getEvents() {
+    public ArrayList<DateEvent> getEvents() {
         return events;
     }
 

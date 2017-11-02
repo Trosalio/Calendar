@@ -1,10 +1,5 @@
 package common;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -20,9 +15,9 @@ public class DateEvent implements Serializable {
     private static int primaryKeyID;
 
     private int ID;
-    private SimpleStringProperty eventName = new SimpleStringProperty(this, "eventName");
-    private ObjectProperty<LocalDate> eventStartDate = new SimpleObjectProperty<>(this, "eventStartDate");
-    private SimpleIntegerProperty eventPriority = new SimpleIntegerProperty(this, "eventPriority");
+    private String eventName;
+    private LocalDate eventStartDate;
+    private int eventPriority;
     private String eventDescription;
     private boolean recurred;
     private boolean repeatMonth;
@@ -30,9 +25,9 @@ public class DateEvent implements Serializable {
     private boolean repeatDay;
 
     public DateEvent() {
-        setEventName("");
-        setEventPriority(1);
-        setEventStartDate(LocalDate.now());
+        eventName ="";
+        eventPriority = 1;
+        eventStartDate = LocalDate.now();
         eventDescription = "";
     }
 
@@ -53,39 +48,27 @@ public class DateEvent implements Serializable {
     }
 
     public String getEventName() {
-        return eventName.get();
-    }
-
-    public void setEventName(String eventName) {
-        this.eventName.set(eventName);
-    }
-
-    public SimpleStringProperty eventNameProperty() {
         return eventName;
     }
 
+    public void setEventName(String eventName) {
+        this.eventName = eventName;
+    }
+
     public LocalDate getEventStartDate() {
-        return eventStartDate.get();
-    }
-
-    public void setEventStartDate(LocalDate eventStartDate) {
-        this.eventStartDate.set(eventStartDate);
-    }
-
-    public ObjectProperty<LocalDate> eventStartDateProperty() {
         return eventStartDate;
     }
 
+    public void setEventStartDate(LocalDate eventStartDate) {
+        this.eventStartDate = eventStartDate;
+    }
+
     public int getEventPriority() {
-        return eventPriority.get();
+        return eventPriority;
     }
 
     public void setEventPriority(int eventPriority) {
-        this.eventPriority.set(eventPriority);
-    }
-
-    public SimpleIntegerProperty eventPriorityProperty() {
-        return eventPriority;
+        this.eventPriority = eventPriority;
     }
 
     public String getEventDescription() {
@@ -138,14 +121,14 @@ public class DateEvent implements Serializable {
     public boolean isEventOccurredAtDate(LocalDate askedDate) {
         if (isRecurred()) {
             if (isRepeatMonth()) {
-                return askedDate.getDayOfMonth() == eventStartDate.get().getDayOfMonth();
+                return askedDate.getDayOfMonth() == eventStartDate.getDayOfMonth();
             } else if (isRepeatWeek()) {
-                return askedDate.getDayOfWeek().equals(eventStartDate.get().getDayOfWeek());
+                return askedDate.getDayOfWeek().equals(eventStartDate.getDayOfWeek());
             } else {
                 return isRepeatDay();
             }
         } else { // one time event
-            return askedDate.isEqual(eventStartDate.get());
+            return askedDate.isEqual(eventStartDate);
         }
     }
 }

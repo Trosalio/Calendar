@@ -1,6 +1,9 @@
 package client.controllers;
 
-
+import common.CalendarService;
+import common.DateEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -10,8 +13,6 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import common.DateEvent;
-import common.CalendarService;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -35,13 +36,14 @@ public class MainUIController {
     private CalendarService calendarService;
     private DateListUIController dateListUIController;
     private MonthUIController monthUIController;
+    private ObservableList<DateEvent> eventsView;
 
     @FXML
     private void onAdd() {
         DateEvent event = new DateEvent();
         if (popEventWindow(event)) {
+            dateListUIController.addEvent(event);
             calendarService.addEvent(event);
-            dateListUIController.changeButtonsState();
             monthUIController.refreshTable();
         }
     }
@@ -49,19 +51,19 @@ public class MainUIController {
     @FXML
     public void onDelete() {
         if (dateListUIController.isAnyItemSelected()) {
-            dateListUIController.deleteEvent();
-            dateListUIController.changeButtonsState();
+            DateEvent removedEvent = dateListUIController.deleteEvent();
+            calendarService.deleteEvent(removedEvent);
             monthUIController.refreshTable();
         }
     }
 
     @FXML
     private void onEdit() {
-        DateEvent event = calendarService.getCurrentEvent();
+        DateEvent event = dateListUIController.getCurrentEvent();
         if (event != null) {
             if (popEventWindow(event)) {
-                calendarService.editEvent(event);
                 dateListUIController.modifyEventInfo(event);
+                calendarService.editEvent(event);
                 monthUIController.refreshTable();
             }
         }
@@ -116,7 +118,7 @@ public class MainUIController {
         Parent dateViewScene = dateListUILoader.load();
         dateListUIController = dateListUILoader.getController();
         dateListUIController.attachHBoxState(stateBox);
-        dateListUIController.setCalendarService(calendarService);
+        dateListUIController.setEventsView(eventsView);
         dateListUIController.initDateListUI();
         dateListViewTab.setContent(dateViewScene);
     }
@@ -125,7 +127,7 @@ public class MainUIController {
         FXMLLoader monthUILoader = new FXMLLoader(getClass().getResource("/fxml/MonthUI.fxml"));
         Parent monthlyViewScene = monthUILoader.load();
         monthUIController = monthUILoader.getController();
-        monthUIController.setCalendarService(calendarService);
+        monthUIController.setEventsView(eventsView);
         monthlyViewTab.setContent(monthlyViewScene);
     }
 
@@ -140,7 +142,11 @@ public class MainUIController {
 
     public void setCalendarService(CalendarService calendarService) {
         this.calendarService = calendarService;
+        setEventsView();
+    }
 
+    private void setEventsView(){
+        this.eventsView = FXCollections.observableList(calendarService.getEvents());
     }
 
     public void displayEventsOfDate(LocalDate date) {

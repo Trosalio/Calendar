@@ -1,13 +1,17 @@
 package client.controllers;
 
+import common.DateEvent;
+import common.DateEventFormatter;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.collections.transformation.SortedList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import common.DateEvent;
-import common.DateEventFormatter;
-import common.CalendarService;
 
 import java.time.LocalDate;
 
@@ -47,12 +51,13 @@ public class DateListUIController {
     private DatePicker searchedDatePicker;
 
     private DateEventFormatter dateEventFormatter = new DateEventFormatter();
-    private CalendarService calendarService;
+
     private HBox hBoxState;
+
+    private ObjectProperty<DateEvent> currentEvent = new SimpleObjectProperty<>(null);
+    private ObservableList<DateEvent> eventsView;
     private FilteredList<DateEvent> filteredDateEvent;
     private SortedList<DateEvent> searchedList;
-//    might come in handy in the future
-//    private MainUIController mainUIController;
 
     @FXML
     private void onClearSearch() {
@@ -65,15 +70,24 @@ public class DateListUIController {
         displayEvents(searchedDatePicker.getValue());
     }
 
-    public void deleteEvent() {
-        int removeIndex = eventTable.getSelectionModel().getSelectedIndex();
-        calendarService.deleteEvent(removeIndex);
+    public void addEvent(DateEvent event) {
+        DateEvent.setPrimaryKeyID(DateEvent.getPrimaryKeyID() + 1);
+        int eventID = DateEvent.getPrimaryKeyID();
+        event.setID(eventID);
+        eventsView.add(event);
         changeButtonsState();
     }
 
+    public DateEvent deleteEvent() {
+        int removedIndex = eventTable.getSelectionModel().getSelectedIndex();
+        DateEvent removedEvent = eventsView.remove(removedIndex);
+        changeButtonsState();
+        return removedEvent;
+    }
+
     public void modifyEventInfo(DateEvent event) {
-        if (event != null) {
-            DateEvent currentEvent = eventTable.getSelectionModel().getSelectedItem();
+        DateEvent currentEvent = eventTable.getSelectionModel().getSelectedItem();
+        if (event != null && currentEvent.equals(event)) {
             eventNameLbl.setText(currentEvent.getEventName());
             eventPriorityLbl.setText(convertPriorityToText(currentEvent.getEventPriority()));
             eventDateLbl.setText(dateEventFormatter.getFormatter().format(currentEvent.getEventStartDate()));
@@ -89,21 +103,21 @@ public class DateListUIController {
     }
 
     private void setupTableView() {
-        eventTable.setItems(calendarService.getEvents());
-        nameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
-        priorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
+        eventTable.setItems(eventsView);
+        nameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEventName()));
+        priorityColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getEventPriority()));
         setPriorityColumnFormatOf(priorityColumn);
-        dateColumn.setCellValueFactory(cell -> cell.getValue().eventStartDateProperty());
+        dateColumn.setCellValueFactory(data -> new SimpleObjectProperty<>(data.getValue().getEventStartDate()));
         dateEventFormatter.formatDateColumn(dateColumn);
         setupItemListenerOf(eventTable);
     }
 
     private void setupSearchedTableView() {
-        filteredDateEvent = new FilteredList<>(calendarService.getEvents(), dateEvent -> true);
+        filteredDateEvent = new FilteredList<>(eventsView, dateEvent -> true);
         searchedList = new SortedList<>(filteredDateEvent);
         searchedEventTable.setItems(searchedList);
-        searchedNameColumn.setCellValueFactory(cell -> cell.getValue().eventNameProperty());
-        searchedPriorityColumn.setCellValueFactory(cell -> cell.getValue().eventPriorityProperty());
+        searchedNameColumn.setCellValueFactory(data -> new SimpleStringProperty(data.getValue().getEventName()));
+        searchedPriorityColumn.setCellValueFactory(data -> new SimpleIntegerProperty(data.getValue().getEventPriority()));
         setPriorityColumnFormatOf(searchedPriorityColumn);
         setupItemListenerOf(searchedEventTable);
     }
@@ -136,11 +150,11 @@ public class DateListUIController {
 
     private void setupItemListenerOf(TableView<DateEvent> tableView) {
         tableView.getSelectionModel().selectedItemProperty().addListener((obs, oldSelection, newSelection) -> {
-            calendarService.setCurrentEvent(newSelection);
+            currentEvent.set(newSelection);
             modifyEventInfo(newSelection);
         });
 
-        calendarService.currentEventProperty().addListener((obs, oldSelection, newSelection) -> {
+        currentEvent.addListener((obs, oldSelection, newSelection) -> {
             if (newSelection == null) {
                 tableView.getSelectionModel().clearSelection();
             } else {
@@ -167,8 +181,8 @@ public class DateListUIController {
         }
     }
 
-    void changeButtonsState() {
-        if (calendarService.getEvents().isEmpty()) {
+    public void changeButtonsState() {
+        if (eventsView.isEmpty()) {
             hBoxState.setDisable(true);
             hBoxState.setVisible(false);
             eventNameLbl.setText("<Name>");
@@ -189,12 +203,16 @@ public class DateListUIController {
         }
     }
 
-    public void attachHBoxState(HBox hBoxState) {
-        this.hBoxState = hBoxState;
+    public void setEventsView(ObservableList<DateEvent> eventsView) {
+        this.eventsView = eventsView;
     }
 
-    public void setCalendarService(CalendarService calendarService) {
-        this.calendarService = calendarService;
+    public DateEvent getCurrentEvent() {
+        return currentEvent.get();
+    }
+
+    public void attachHBoxState(HBox hBoxState) {
+        this.hBoxState = hBoxState;
     }
 
     public void initDateListUI() {
@@ -231,9 +249,4 @@ public class DateListUIController {
     public void displayEventsOfDate(LocalDate currentDate) {
         searchedDatePicker.setValue(currentDate);
     }
-
-//    Might come handy in the future
-//    public void bindMainUIController(MainUIController mainUIController) {
-//        this.mainUIController = mainUIController;
-//    }
 }

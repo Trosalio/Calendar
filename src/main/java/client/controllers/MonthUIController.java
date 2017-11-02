@@ -1,13 +1,13 @@
 package client.controllers;
 
+import common.DateEvent;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.control.Label;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import common.DateEvent;
-import common.CalendarService;
 
 import java.time.LocalDate;
 
@@ -28,13 +28,28 @@ public class MonthUIController {
     private VBox[][] vBoxes;
 
     private LocalDate baseDate;
-    private CalendarService calendarService;
+    private ObservableList<DateEvent> eventsView;
     private MainUIController mainUIController;
 
     @FXML
     public void initialize() {
         baseDate = LocalDate.now();
         initArrays(gridPane.getRowConstraints().size(), gridPane.getColumnConstraints().size());
+    }
+
+    @FXML
+    private void onPrevMonthBtn() {
+        updateMonthTable(baseDate = baseDate.minusMonths(1));
+    }
+
+    @FXML
+    private void onNextMonthBtn() {
+        updateMonthTable(baseDate = baseDate.plusMonths(1));
+    }
+
+    @FXML
+    private void onRefreshBtn() {
+        refreshTable();
     }
 
     private void initArrays(int row, int column) {
@@ -57,13 +72,13 @@ public class MonthUIController {
             for (int j = 0; j < gridPane.getColumnConstraints().size(); j++) {
                 vBoxes[i][j].getChildren().clear();
                 LocalDate currentDate = firstDateOfMonth.plusDays(indexDay - firstDayOfWeek);
-                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth, calendarService);
+                setGridInfo(vBoxes[i][j], currentDate, firstDateOfMonth);
                 indexDay++;
             }
         }
     }
 
-    private void setGridInfo(VBox vBox, LocalDate currentDate, LocalDate firstDate, CalendarService list) {
+    private void setGridInfo(VBox vBox, LocalDate currentDate, LocalDate firstDate) {
         Label dateLabel = new Label(String.valueOf(currentDate.getDayOfMonth()));
         dateLabel.setFont(Font.font(14));
         vBox.getChildren().add(dateLabel);
@@ -76,7 +91,7 @@ public class MonthUIController {
             } else {
                 dateLabel.setUnderline(false);
             }
-            for (DateEvent event : list.getEvents()) {
+            for (DateEvent event : eventsView) {
                 Label eventLabel;
                 if (vBox.getChildren().size() < 3) {
                     if (!currentDate.isBefore(event.getEventStartDate())) {
@@ -103,32 +118,17 @@ public class MonthUIController {
         refreshTable();
     }
 
-    @FXML
-    private void onPrevMonthBtn() {
-        updateMonthTable(baseDate = baseDate.minusMonths(1));
-    }
-
-    @FXML
-    private void onNextMonthBtn() {
-        updateMonthTable(baseDate = baseDate.plusMonths(1));
-    }
-
-    @FXML
-    private void onRefreshBtn() {
-        refreshTable();
-    }
-
     public void refreshTable() {
-        updateMonthTable(baseDate);
-    }
-
-    public void setCalendarService(CalendarService calendarService) {
-        this.calendarService = calendarService;
         updateMonthTable(baseDate);
     }
 
     public void bindMainUIController(MainUIController mainUIController) {
         this.mainUIController = mainUIController;
+    }
+
+    public void setEventsView(ObservableList<DateEvent> eventsView) {
+        this.eventsView = eventsView;
+        updateMonthTable(baseDate);
     }
 }
 

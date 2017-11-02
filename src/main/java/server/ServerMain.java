@@ -14,7 +14,7 @@ import server.persistences.SQLiteConnector;
  */
 
 public class ServerMain {
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) throws Exception {
         ApplicationContext bf = new ClassPathXmlApplicationContext("/configs/calendar-server.xml");
         CalendarServiceImp serviceImp = (CalendarServiceImp) bf.getBean("calendarServiceImp");
         DBConnector DBConnector = bf.getBean("sQLiteConnector", SQLiteConnector.class);
@@ -22,7 +22,5 @@ public class ServerMain {
         dbManager.setDatabaseConnector(DBConnector);
         dbManager.loadDatabase();
         System.out.println("Server is on");
-
-
     }
 }

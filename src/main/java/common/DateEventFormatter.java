@@ -13,15 +13,15 @@ import java.time.format.DateTimeFormatter;
  * ID:     5810405029
  * Project Name: Calendar
  * Credit to: criticalx7
- *
+ * <p>
  * This helper class handles format date components
  * into a desirable format.
  */
 
 public class DateEventFormatter {
 
-    // datePattern - Default pattern of this class is dd MMMM yyyy
-    private String datePattern = "dd MMMM yyyy";
+    // datePattern - Default pattern of this class is dd MMM yyyy
+    private String datePattern = "dd MMM yyyy";
 
     /**
      * Fluent method for change date pattern.
@@ -32,13 +32,6 @@ public class DateEventFormatter {
     public DateEventFormatter ofPattern(String pattern) {
         datePattern = pattern;
         return this;
-    }
-
-    /**
-     * @return Current formatter based on current pattern
-     */
-    public DateTimeFormatter getFormatter() {
-        return DateTimeFormatter.ofPattern(datePattern);
     }
 
     /**
@@ -98,6 +91,11 @@ public class DateEventFormatter {
             });
     }
 
-
+    /**
+     * @return Current formatter based on current pattern
+     */
+    public DateTimeFormatter getFormatter() {
+        return DateTimeFormatter.ofPattern(datePattern);
+    }
 }
 

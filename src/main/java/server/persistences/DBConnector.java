@@ -1,10 +1,10 @@
 package server.persistences;
 
-import javafx.collections.ObservableList;
 import common.DateEvent;
 import org.sqlite.SQLiteConfig;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  * ~Created by~
@@ -16,22 +16,26 @@ import java.sql.*;
 public abstract class DBConnector {
 
     private String DRIVER_URL = setUpDriver();
-    protected Connection conn;
 
-    public Connection getDatabaseConnection() {
+    protected Connection getDatabaseConnection() {
         SQLiteConfig config = new SQLiteConfig();
         config.enforceForeignKeys(true);
+        Connection connection = null;
         try {
-            conn = DriverManager.getConnection(DRIVER_URL, config.toProperties());
+            connection = DriverManager.getConnection(DRIVER_URL, config.toProperties());
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return conn;
+        return connection;
     }
 
     public abstract String setUpDriver();
 
     protected abstract void createTableIfNotExist();
+
+    public abstract ResultSet loadItemsFromDatabase(ArrayList<DateEvent> eventList);
+
+    protected abstract void pullDataToEventList(ResultSet rs, ArrayList<DateEvent> eventList) throws SQLException;
 
     // Does not contain recurring event
     protected abstract void insertItemToDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, boolean isRecurred);
@@ -50,24 +54,11 @@ public abstract class DBConnector {
     protected abstract void deleteRecurredItemInDatabase(int ID);
 
     protected void updateDatabase(String updateSQL) {
-        PreparedStatement pStmt = null;
-        try {
-            conn = getDatabaseConnection();
-            pStmt = conn.prepareStatement(updateSQL);
+        try (Connection connection = getDatabaseConnection();
+             PreparedStatement pStmt = connection.prepareStatement(updateSQL)) {
             pStmt.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            try { pStmt.close(); } catch (SQLException e) {/* ignored */}
-            try { conn.close(); } catch (SQLException e) {/* ignored */}
         }
-    }
-
-    public abstract ResultSet loadItemsFromDatabase(ObservableList<DateEvent> eventList);
-
-    protected abstract void pullDataToEventList(ResultSet rs, ObservableList<DateEvent> eventList) throws SQLException;
-
-    public void setDRIVER_URL(String DRIVER_URL) {
-        this.DRIVER_URL = DRIVER_URL;
     }
 }

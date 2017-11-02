@@ -16,19 +16,22 @@ import static org.junit.jupiter.api.Assertions.*;
 class EventListTest {
 
     private CalendarServiceImp mockedEventManager;
-    private DateEvent mockedEvent;
+    private DateEvent mockedEvent1, mockedEvent2;
 
     @BeforeEach
     void init(){
         mockedEventManager = new CalendarServiceImp();
-        mockedEvent = new DateEvent();
-        mockedEventManager.addEvent(mockedEvent);
+        mockedEvent1 = new DateEvent();
+        mockedEvent2 = new DateEvent();
+        mockedEventManager.addEvent(mockedEvent1);
+        mockedEventManager.addEvent(mockedEvent2);
     }
 
     @AfterEach
     void tearDown(){
         mockedEventManager = null;
-        mockedEvent = null;
+        mockedEvent1 = null;
+        mockedEvent2 = null;
     }
 
     @Test
@@ -40,7 +43,9 @@ class EventListTest {
 
     @Test
     void deleteEvent() {
-        mockedEventManager.deleteEvent(0);
+        mockedEventManager.deleteEvent(mockedEvent1);
+        assertEquals(mockedEventManager.getEvents().size(), 1);
+        mockedEventManager.deleteEvent(mockedEvent2);
         assertEquals(mockedEventManager.getEvents().size(), 0);
         assertTrue(mockedEventManager.getEvents().isEmpty());
     }

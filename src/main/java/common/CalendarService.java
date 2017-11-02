@@ -1,7 +1,6 @@
 package common;
 
-import javafx.beans.property.ObjectProperty;
-import javafx.collections.ObservableList;
+import java.util.ArrayList;
 
 /**
  * ~Created by~
@@ -11,17 +10,11 @@ import javafx.collections.ObservableList;
  */
 
 public interface CalendarService {
-    void addEvent(DateEvent event);
+    void addEvent(DateEvent addedEvent);
 
-    void deleteEvent(int removeIndex);
+    void deleteEvent(DateEvent removedEvent);
 
     void editEvent(DateEvent event);
 
-    DateEvent getCurrentEvent();
-
-    ObservableList<DateEvent> getEvents();
-
-    void setCurrentEvent(DateEvent newSelection);
-
-    ObjectProperty<DateEvent> currentEventProperty();
+    ArrayList<DateEvent> getEvents();
 }

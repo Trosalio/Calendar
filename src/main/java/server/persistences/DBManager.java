@@ -60,7 +60,6 @@ public class DBManager {
         databaseConnector.loadItemsFromDatabase(serviceImp.getEvents());
     }
 
-
     public void setDatabaseConnector(DBConnector databaseConnector) {
         this.databaseConnector = databaseConnector;
     }
