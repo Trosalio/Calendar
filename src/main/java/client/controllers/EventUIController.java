@@ -55,12 +55,10 @@ public class EventUIController {
                 dateEvent.setEventPriority(getPriorityFromButton());
                 dateEvent.setEventStartDate(startDatePicker.getValue());
                 dateEvent.setEventDescription(eventDescTxtA.getText());
-                dateEvent.clearRepeatOptions();
-                dateEvent.setRecurred(repeatChoiceBox.isSelected());
-                if (dateEvent.isRecurred()) {
-                    dateEvent.setRepeatDay(dailyBtn.isSelected());
-                    dateEvent.setRepeatWeek(weeklyBtn.isSelected());
-                    dateEvent.setRepeatMonth(monthlyBtn.isSelected());
+                if (!repeatChoiceBox.isSelected()) {
+                    dateEvent.setRecurrence(0);
+                } else {
+                    dateEvent.setRecurrence(dailyBtn.isSelected() ? 1 : weeklyBtn.isSelected() ? 2 : 3);
                 }
                 popDialog(AlertType.INFORMATION, "Success", "Event is saved!");
                 saveBool = true;
@@ -113,12 +111,20 @@ public class EventUIController {
         eventNameTxtF.setText(dateEvent.getEventName());
         eventDescTxtA.setText(dateEvent.getEventDescription());
         startDatePicker.setValue(dateEvent.getEventStartDate());
-        if (dateEvent.isRecurred()) {
+        int recurrence = dateEvent.getRecurrence();
+        if (recurrence > 0) {
             repeatChoiceBox.setSelected(true);
             recurBox.setVisible(true);
-            dailyBtn.setSelected(dateEvent.isRepeatDay());
-            weeklyBtn.setSelected(dateEvent.isRepeatWeek());
-            monthlyBtn.setSelected(dateEvent.isRepeatMonth());
+            switch (recurrence) {
+                case 1:
+                    dailyBtn.setSelected(true);
+                    break;
+                case 2:
+                    weeklyBtn.setSelected(true);
+                    break;
+                case 3:
+                    monthlyBtn.setSelected(true);
+            }
         } else {
             repeatChoiceBox.setSelected(false);
             recurBox.setVisible(false);

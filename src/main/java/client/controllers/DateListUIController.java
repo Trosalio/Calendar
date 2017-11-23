@@ -140,12 +140,7 @@ public class DateListUIController {
     }
 
     private String convertRecurrenceBooleanToText(DateEvent currentEvent) {
-        String reply = "No";
-        if (currentEvent.isRecurred()) {
-            reply = "Yes, ";
-            reply += currentEvent.isRepeatMonth() ? "Monthly" : currentEvent.isRepeatWeek() ? "Weekly" : "Daily";
-        }
-        return reply;
+        return currentEvent.getRecurrenceType()[currentEvent.getRecurrence()];
     }
 
     private void setupItemListenerOf(TableView<DateEvent> tableView) {

@@ -30,16 +30,13 @@ public class DBManager {
         int eventPriority = event.getEventPriority();
         String eventStartDateDate = dateTimeFormatter.format(event.getEventStartDate());
         String eventDescription = event.getEventDescription();
-        boolean isRecurred = event.isRecurred();
-        boolean isRepeatMonth = event.isRepeatMonth();
-        boolean isRepeatWeek = event.isRepeatWeek();
-        boolean isRepeatDay = event.isRepeatDay();
+        int recurrence = event.getRecurrence();
         databaseConnector.insertItemToDatabase(eventName, eventPriority, eventStartDateDate, eventDescription,
-                isRecurred, isRepeatMonth, isRepeatWeek, isRepeatDay);
+                recurrence);
     }
 
-    public void deleteEventRecord(int ID, boolean isRecurred) {
-        databaseConnector.deleteItemInDatabase(ID, isRecurred);
+    public void deleteEventRecord(int ID) {
+        databaseConnector.deleteItemInDatabase(ID);
     }
 
     public void modifyEventRecord(DateEvent event) {
@@ -48,12 +45,9 @@ public class DBManager {
         String eventStartDateDate = dateTimeFormatter.format(event.getEventStartDate());
         String eventDescription = event.getEventDescription();
         int eventID = event.getID();
-        boolean isRecurred = event.isRecurred();
-        boolean isRepeatMonth = event.isRepeatMonth();
-        boolean isRepeatWeek = event.isRepeatWeek();
-        boolean isRepeatDay = event.isRepeatDay();
+        int recurrence = event.getRecurrence();
         databaseConnector.modifyItemInDatabase(eventName, eventPriority, eventStartDateDate, eventDescription, eventID,
-                isRecurred, isRepeatMonth, isRepeatWeek, isRepeatDay);
+                recurrence);
     }
 
     public void loadDatabase() {

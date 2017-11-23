@@ -12,23 +12,21 @@ import java.time.LocalDate;
 
 public class DateEvent implements Serializable {
 
+    private String[] recurrenceType = {"None", "Daily", "Weekly", "Monthly"};
     private static int primaryKeyID;
-
     private int ID;
     private String eventName;
     private LocalDate eventStartDate;
     private int eventPriority;
     private String eventDescription;
-    private boolean recurred;
-    private boolean repeatMonth;
-    private boolean repeatWeek;
-    private boolean repeatDay;
+    private int recurrence;
 
     public DateEvent() {
-        eventName ="";
+        eventName = "";
         eventPriority = 1;
         eventStartDate = LocalDate.now();
         eventDescription = "";
+        recurrence = 0;
     }
 
     public static int getPrimaryKeyID() {
@@ -79,57 +77,32 @@ public class DateEvent implements Serializable {
         this.eventDescription = eventDescription;
     }
 
-    public boolean isRecurred() {
-        return recurred;
+    public int getRecurrence() {
+        return recurrence;
     }
 
-    public void setRecurred(boolean recurred) {
-        this.recurred = recurred;
-    }
-
-    public boolean isRepeatMonth() {
-        return repeatMonth;
-    }
-
-    public void setRepeatMonth(boolean repeatMonth) {
-        this.repeatMonth = repeatMonth;
-    }
-
-    public boolean isRepeatWeek() {
-        return repeatWeek;
-    }
-
-    public void setRepeatWeek(boolean repeatWeek) {
-        this.repeatWeek = repeatWeek;
-    }
-
-    public boolean isRepeatDay() {
-        return repeatDay;
-    }
-
-    public void setRepeatDay(boolean repeatDay) {
-        this.repeatDay = repeatDay;
-    }
-
-    public void clearRepeatOptions() {
-        setRecurred(false);
-        repeatDay = false;
-        repeatWeek = false;
-        repeatMonth = false;
+    public void setRecurrence(int recurrence) {
+        this.recurrence = recurrence;
     }
 
     public boolean isEventOccurredAtDate(LocalDate askedDate) {
-        if (isRecurred()) {
-            if (isRepeatMonth()) {
-                return askedDate.getDayOfMonth() == eventStartDate.getDayOfMonth();
-            } else if (isRepeatWeek()) {
-                return askedDate.getDayOfWeek().equals(eventStartDate.getDayOfWeek());
-            } else {
-                return isRepeatDay();
+        if (recurrence > 0) {
+            switch (recurrence) {
+                case 1: // daily case
+                    return true;
+                case 2: // weekly case
+                    return askedDate.getDayOfWeek().equals(eventStartDate.getDayOfWeek());
+                case 3: // monthly case
+                    return askedDate.getDayOfMonth() == eventStartDate.getDayOfMonth();
             }
         } else { // one time event
             return askedDate.isEqual(eventStartDate);
         }
+        return false;
+    }
+
+    public String[] getRecurrenceType() {
+        return recurrenceType;
     }
 }
 

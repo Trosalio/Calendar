@@ -24,7 +24,7 @@ public class CalendarServiceImp implements CalendarService {
     }
 
     public void deleteEvent(DateEvent removedEvent) {
-        if (dataSource != null) dataSource.deleteEventRecord(removedEvent.getID(), removedEvent.isRecurred());
+        if (dataSource != null) dataSource.deleteEventRecord(removedEvent.getID());
     }
 
     public void editEvent(DateEvent event) {

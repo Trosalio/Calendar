@@ -37,21 +37,11 @@ public abstract class DBConnector {
 
     protected abstract void pullDataToEventList(ResultSet rs, ArrayList<DateEvent> eventList) throws SQLException;
 
-    // Does not contain recurring event
-    protected abstract void insertItemToDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, boolean isRecurred);
+    protected abstract void insertItemToDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, int recurrence);
 
-    // Contains recurring event
-    public abstract void insertItemToDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, boolean isRecurred, boolean isMonthly, boolean isWeekly, boolean isDaily);
+    protected abstract void modifyItemInDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, int eventID, int recurrence);
 
-    // Does not contain recurring event
-    protected abstract void modifyItemInDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, int eventID, boolean isRecurred);
-
-    // Contains recurring event
-    public abstract void modifyItemInDatabase(String eventName, int eventPriority, String eventDate, String eventDescription, int eventID, boolean isRecurred, boolean isMonthly, boolean isWeekly, boolean isDaily);
-
-    public abstract void deleteItemInDatabase(int ID, boolean isRecurred);
-
-    protected abstract void deleteRecurredItemInDatabase(int ID);
+    public abstract void deleteItemInDatabase(int ID);
 
     protected void updateDatabase(String updateSQL) {
         try (Connection connection = getDatabaseConnection();
